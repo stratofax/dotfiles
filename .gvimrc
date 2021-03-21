@@ -1,1 +1,1 @@
-set guifont=Source_Code_Pro_Semi-Bold:h12
+set guifont=Source\ Code\ Pro\ Semi-Bold\ 12
