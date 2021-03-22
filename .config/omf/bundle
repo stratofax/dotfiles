@@ -1,2 +1,8 @@
+package battery
+package brew
+package colored-man-pages
+package config
+package osx
+package spark
 theme budspencer
 theme default
