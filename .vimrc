@@ -27,7 +27,7 @@ nnoremap k gk
 set cursorline
 set ruler
 set visualbell
-colorscheme ron
+colorscheme slate
 
 " leader key
 let mapleader = ","
