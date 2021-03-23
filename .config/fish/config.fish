@@ -3,6 +3,7 @@ if status --is-interactive
     abbr --add --global dtfs dotfiles status
     abbr --add --global dtfa dotfiles add 
     abbr --add --global dtfc dotfiles commit -m 
+    abbr --add --global dtfp dotfiles push
     abbr --add --global gco git checkout
     # etcetera
 end
