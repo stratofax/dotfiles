@@ -2,6 +2,7 @@ package battery
 package brew
 package colored-man-pages
 package config
+package https://github.com/jhillyerd/plugin-git
 package osx
 package spark
 theme budspencer
