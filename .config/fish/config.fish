@@ -1,11 +1,11 @@
 if status --is-interactive
-    abbr --add --global dtf dotfiles 
-    abbr --add --global dtfs dotfiles status
-    abbr --add --global dtfa dotfiles add 
-    abbr --add --global dtfc dotfiles commit -m 
-    abbr --add --global dtfp dotfiles push
-    abbr --add --global gco git checkout
-    # etcetera
+    abbr --add --global dtf 'dotfiles'
+    abbr --add --global dtfs 'dotfiles status'
+    abbr --add --global dtfa 'dotfiles add'
+    abbr --add --global dtfc 'dotfiles commit -m'
+    abbr --add --global dtfp 'dotfiles push'
+    abbr --add --global gco 'git checkout'
+    # abbr --add --global audg sudo apt update && sudo apt upgrade
 end
 
 # eval (pipenv --completion)
