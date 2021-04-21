@@ -5,6 +5,7 @@ if status --is-interactive
     abbr --add --global dtfc 'dotfiles commit -m'
     abbr --add --global dtfp 'dotfiles push'
     abbr --add --global gco 'git checkout'
+    abbr --add --global gpr 'git pull --rebase'
     abbr --add --global audg 'sudo apt update && sudo apt upgrade'
     abbr --add --global q! 'exit'
 end
