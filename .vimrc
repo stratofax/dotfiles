@@ -27,7 +27,7 @@ nnoremap k gk
 set cursorline
 set ruler
 set visualbell
-colorscheme slate
+colorscheme torte
 " set the prefered colours, pick one line here only.
 " dark grey, better you can get if you don't support 256 colours
 "hi CursorLine   cterm=NONE ctermbg=8 ctermfg=NONE
@@ -60,3 +60,18 @@ map! <F5> <Esc>:w<CR>A
 map! <F6> <Esc>:w<CR>ztg<C-g>
 " add timestamp as Markdown H2 at end of file, call quicksave with word count
 map! <F7> <Esc>GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <F6>
+
+" change case of selected text (visual mode)
+" UPPER, lower, Title Case, repeat
+function! TwiddleCase(str)
+  if a:str ==# toupper(a:str)
+    let result = tolower(a:str)
+  elseif a:str ==# tolower(a:str)
+    let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+  else
+    let result = toupper(a:str)
+  endif
+  return result
+endfunction
+vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
+
