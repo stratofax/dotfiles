@@ -27,7 +27,8 @@ nnoremap k gk
 set cursorline
 set ruler
 set visualbell
-colorscheme torte
+colorscheme ron
+
 " set the prefered colours, pick one line here only.
 " dark grey, better you can get if you don't support 256 colours
 "hi CursorLine   cterm=NONE ctermbg=8 ctermfg=NONE
