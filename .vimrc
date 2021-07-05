@@ -11,6 +11,13 @@ set number
 set relativenumber
 syntax on
 
+" search down into subfolders
+" Provide tab completion for all file-related tasks
+set path+=**
+
+" display all matching files when we hit tab
+set wildmenu
+
 " break the arrow key habit
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -27,7 +34,7 @@ nnoremap k gk
 set cursorline
 set ruler
 set visualbell
-colorscheme ron
+colorscheme slate
 
 " set the prefered colours, pick one line here only.
 " dark grey, better you can get if you don't support 256 colours
