@@ -53,17 +53,19 @@ hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 "hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
 hi CursorLine term=bold cterm=bold
 
-# Alt key equivalents
-# cut with "x"
+" Alt key equivalents
+" cut with x
 map <A-x> "+x
 map! <A-x> <Esc>"+xA
- copy with "c"
+" copy with c
 map <A-c> "+y
 map! <A-v> <Esc>"+yA
-# Paste with "v"
+" Paste with v
 map <A-v> "+gP
 map! <A-v> <Esc>"+gPA
-#
+" select all with a
+map <A-a> ggVG
+map!<A-a> <Esc>ggVG
 
 " leader key
 let mapleader = ","
