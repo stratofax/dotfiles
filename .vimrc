@@ -53,6 +53,18 @@ hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 "hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
 hi CursorLine term=bold cterm=bold
 
+# Alt key equivalents
+# cut with "x"
+map <A-x> "+x
+map! <A-x> <Esc>"+xA
+ copy with "c"
+map <A-c> "+y
+map! <A-v> <Esc>"+yA
+# Paste with "v"
+map <A-v> "+gP
+map! <A-v> <Esc>"+gPA
+#
+
 " leader key
 let mapleader = ","
 " edit the .vimrc file in a new vertical split
