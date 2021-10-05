@@ -42,7 +42,7 @@ colorscheme slate
 " light grey, no 256 colors
 "hi CursorLine   cterm=NONE ctermbg=7 ctermfg=NONE
 " dark redish
-hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
+"hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 " dark bluish
 "hi CursorLine   cterm=NONE ctermbg=17 ctermfg=NONE
 " very light grey
@@ -50,7 +50,8 @@ hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 " yelowish
 "hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
 " almost black
-"hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
+hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
+" bold text on cursoline
 hi CursorLine term=bold cterm=bold
 
 " Alt key equivalents
@@ -61,20 +62,39 @@ map! <A-x> <Esc>"+xA
 map <A-c> "+y
 map! <A-v> <Esc>"+yA
 " Paste with v
-map <A-v> "+gP
-map! <A-v> <Esc>"+gPA
+map <A-v> "+gp
+map! <A-v> <Esc>"+gpA
 " select all with a
 map <A-a> ggVG
 map!<A-a> <Esc>ggVG
+" save with s
+map <A-s> :w
+map!<A-s> <Esc>:w
 
-" leader key
-let mapleader = ","
+" leader key defualt is \
+" let mapleader = "\"
 " edit the .vimrc file in a new vertical split
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 " save with a wordcount, scroll current line to top
-nnoremap <leader>c :w<CR>ztg<C-g>
+nnoremap <leader>wc :w<CR>ztg<C-g>
 " insert a Markdown header timestamp, save with wordcount
-nnoremap <leader>t GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <Esc>:w<CR>o<Esc>g<C-g>
+nnoremap <leader>t GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <Esc>:w<CR>o<Esc>zzg<C-g>
+" delete trailing spaces in the current file
+nnoremap <leader>dt :%s/\s\+$//e<CR>
+
+" use standard Win/ Mac Linux keyboard equivalents
+" cut with x
+nnoremap <leader>x "+x
+" copy with c
+nnoremap <leader>c "+y
+" Paste with v and resume insert
+nnoremap <leader>v "+gPA
+" select all with a
+nnoremap <leader>a ggVG
+" save with s
+nnoremap <leader>s :w<CR>
+"quit with q
+nnoremap <leader>q :x<CR>
 
 " quicksave, append at end of line
 map! <F5> <Esc>:w<CR>A
