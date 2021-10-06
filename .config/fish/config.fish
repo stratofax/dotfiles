@@ -14,7 +14,9 @@ end
 if test (uname -s) = "Darwin"
   set -gx PATH /usr/local/opt/coreutils/libexec/gnubin $PATH
   set -gx PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
+  set PATH $PATH /Users/neil/.local/bin
+elif
+  set PATH $PATH /home/neil/.local/bin
 end
 
-# Created by `pipx` on 2021-07-03 17:22:34
-set PATH $PATH /home/neil/.local/bin
+
