@@ -6,7 +6,7 @@ set modelines=0
 " text wrapping
 set wrap
 set linebreak
-
+" turn on relative line numbers
 set number
 set relativenumber
 syntax on
@@ -34,15 +34,15 @@ nnoremap k gk
 set cursorline
 set ruler
 set visualbell
-colorscheme slate
+colorscheme ron
 
 " set the prefered colours, pick one line here only.
 " dark grey, better you can get if you don't support 256 colours
-"hi CursorLine   cterm=NONE ctermbg=8 ctermfg=NONE
+" hi CursorLine   cterm=NONE ctermbg=8 ctermfg=NONE
 " light grey, no 256 colors
-"hi CursorLine   cterm=NONE ctermbg=7 ctermfg=NONE
+" hi CursorLine   cterm=NONE ctermbg=7 ctermfg=NONE
 " dark redish
-"hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
+hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 " dark bluish
 "hi CursorLine   cterm=NONE ctermbg=17 ctermfg=NONE
 " very light grey
@@ -50,7 +50,7 @@ colorscheme slate
 " yelowish
 "hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
 " almost black
-hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
+" hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
 " bold text on cursoline
 hi CursorLine term=bold cterm=bold
 
