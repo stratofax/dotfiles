@@ -1,3 +1,4 @@
+package bass
 package battery
 package brew
 package colored-man-pages

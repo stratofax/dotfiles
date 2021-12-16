@@ -10,6 +10,9 @@ set linebreak
 set number
 set relativenumber
 syntax on
+" use more conventional splits
+set splitbelow
+set splitright
 
 " search down into subfolders
 " Provide tab completion for all file-related tasks
@@ -48,9 +51,9 @@ colorscheme slate
 " very light grey
 "hi CursorLine   cterm=NONE ctermbg=254 ctermfg=NONE
 " yelowish
-"hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
+hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
 " almost black
-hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
+" hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
 " bold text on cursoline
 hi CursorLine term=bold cterm=bold
 
