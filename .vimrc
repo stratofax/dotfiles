@@ -34,7 +34,7 @@ nnoremap j gj
 nnoremap k gk
 
 " visuals
-set cursorline
+set nocursorline
 set ruler
 set visualbell
 colorscheme ron
