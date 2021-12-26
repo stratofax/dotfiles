@@ -17,27 +17,14 @@ set splitright
 " search down into subfolders
 " Provide tab completion for all file-related tasks
 set path+=**
-
 " display all matching files when we hit tab
 set wildmenu
 
-" break the arrow key habit
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-nnoremap j gj
-nnoremap k gk
-
-" visuals
+""" visual appearance
 set nocursorline
 set ruler
 set visualbell
-colorscheme ron
+colorscheme slate
 
 " set the prefered colours, pick one line here only.
 " dark grey, better you can get if you don't support 256 colours
@@ -55,7 +42,20 @@ hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
 " almost black
 " hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
 " bold text on cursoline
-hi CursorLine term=bold cterm=bold
+" hi CursorLine term=bold cterm=bold
+
+""" Keyboard
+" break the arrow key habit
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap j gj
+nnoremap k gk
 
 " Alt key equivalents
 " cut with x
@@ -125,7 +125,7 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-let g:netrw_winsize = 25
+let g:netrw_winsize = 20
 augroup ProjectDrawer
   autocmd!
   autocmd VimEnter * :Vexplore
