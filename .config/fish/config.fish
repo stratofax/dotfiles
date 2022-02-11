@@ -7,7 +7,7 @@ if status --is-interactive
     abbr --add --global gco 'git checkout'
     abbr --add --global gpr 'git pull --rebase'
     abbr --add --global audg 'sudo apt update && sudo apt upgrade'
-    abbr --add --global q! 'exit'
+    abbr --add --global :q 'exit'
 end
 
 # eval (pipenv --completion)
