@@ -13,6 +13,8 @@ syntax on
 " use more conventional splits
 set splitbelow
 set splitright
+" set conventional backspace
+set backspace=2
 
 " search down into subfolders
 " Provide tab completion for all file-related tasks
