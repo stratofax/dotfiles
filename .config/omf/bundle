@@ -6,5 +6,7 @@ package config
 package https://github.com/jhillyerd/plugin-git
 package osx
 package spark
-theme budspencer
+theme clearance
+theme cyan
 theme default
+theme kawasaki
