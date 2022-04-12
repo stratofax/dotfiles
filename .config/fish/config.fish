@@ -19,4 +19,4 @@ else
   set PATH $PATH /home/neil/.local/bin
 end
 
-
+fish_vi_key_bindings
