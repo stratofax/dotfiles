@@ -14,9 +14,9 @@ end
 if test (uname -s) = "Darwin"
   set -gx PATH /usr/local/opt/coreutils/libexec/gnubin $PATH
   set -gx PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
-  set PATH $PATH /Users/neil/.local/bin
+  set PATH $PATH /Users/neil/.local/bin /Users/neil/bin/ /Users/neil/.poetry/bin
 else
-  set PATH $PATH /home/neil/.local/bin
+  set PATH $PATH /home/neil/.local/bin /home/neil/bin/ /Users/neil/.poetry/bin
 end
 
 fish_vi_key_bindings
