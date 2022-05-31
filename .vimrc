@@ -3,18 +3,21 @@
 set nocompatible
 " block modeline exploits
 set modelines=0
+
 " text wrapping
 set wrap
 set linebreak
+" set conventional backspace
+set backspace=2
+
 " turn on relative line numbers
 set number
 set relativenumber
 syntax on
+
 " use more conventional splits
 set splitbelow
 set splitright
-" set conventional backspace
-set backspace=2
 
 " search down into subfolders
 " Provide tab completion for all file-related tasks
@@ -34,7 +37,7 @@ colorscheme slate
 " light grey, no 256 colors
 " hi CursorLine   cterm=NONE ctermbg=7 ctermfg=NONE
 " dark redish
-hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
+" hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
 " dark bluish
 "hi CursorLine   cterm=NONE ctermbg=17 ctermfg=NONE
 " very light grey
@@ -60,18 +63,23 @@ nnoremap j gj
 nnoremap k gk
 
 " Alt key equivalents
+
 " cut with x
 map <A-x> "+x
 map! <A-x> <Esc>"+xA
+
 " copy with c
 map <A-c> "+y
 map! <A-v> <Esc>"+yA
+
 " Paste with v
 map <A-v> "+gp
 map! <A-v> <Esc>"+gpA
+
 " select all with a
 map <A-a> ggVG
 map!<A-a> <Esc>ggVG
+
 " save with s
 map <A-s> :w
 map!<A-s> <Esc>:w
