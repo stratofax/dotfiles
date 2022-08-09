@@ -10,9 +10,8 @@ set linebreak
 " set conventional backspace
 set backspace=2
 
-" turn on relative line numbers
-set number
-set relativenumber
+" turn on hybrid line numbers
+set number relativenumber
 syntax on
 
 " use more conventional splits
@@ -94,6 +93,8 @@ nnoremap <leader>wc :w<CR>ztg<C-g>
 nnoremap <leader>t GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <Esc>:w<CR>o<Esc>zzg<C-g>
 " delete trailing spaces in the current file
 nnoremap <leader>dt :%s/\s\+$//e<CR>
+" replace double spaces with single spaces 
+nnoremap <leader>2s :%s/\ \ /\ /g<CR>`` 
 
 " use standard Win/ Mac Linux keyboard equivalents
 " cut with x
@@ -131,6 +132,7 @@ endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 
 " configure netrw file browser
+let g:netrw_preview = 1
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
@@ -140,3 +142,6 @@ augroup ProjectDrawer
   autocmd!
   autocmd VimEnter * :Vexplore
 augroup END
+
+" Show syntax highlights in fenced code blocks
+let g:markdown_fenced_languages = ['bash', 'css', 'html', 'javascript', 'js=javascript', 'json=javascript', 'python', 'ruby', 'sass', 'xml', 'vim']
