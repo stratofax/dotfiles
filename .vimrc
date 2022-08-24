@@ -145,3 +145,7 @@ augroup END
 
 " Show syntax highlights in fenced code blocks
 let g:markdown_fenced_languages = ['bash', 'css', 'html', 'javascript', 'js=javascript', 'json=javascript', 'python', 'ruby', 'sass', 'xml', 'vim']
+
+" use <ctrl-x><ctrl-o> after typing < to trigger
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+
