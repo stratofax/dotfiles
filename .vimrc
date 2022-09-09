@@ -7,6 +7,10 @@ set modelines=0
 " text wrapping
 set wrap
 set linebreak
+" use spaces, not tabs
+:set expandtab
+:set tabstop=2
+
 " set conventional backspace
 set backspace=2
 
