@@ -18,6 +18,9 @@ set backspace=2
 set number relativenumber
 syntax on
 
+" configure indents and tabs for coding
+set autoindent expandtab tabstop=2 shiftwidth=2
+
 " use more conventional splits
 set splitbelow
 set splitright
