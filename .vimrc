@@ -8,8 +8,8 @@ set modelines=0
 set wrap
 set linebreak
 " use spaces, not tabs
-:set expandtab
-:set tabstop=2
+set expandtab
+set tabstop=2
 
 " set conventional backspace
 set backspace=2
@@ -30,6 +30,9 @@ set splitright
 set path+=**
 " display all matching files when we hit tab
 set wildmenu
+
+" command history
+set history=10000
 
 """ visual appearance
 set nocursorline
