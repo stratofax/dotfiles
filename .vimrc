@@ -36,6 +36,8 @@ set history=10000
 
 """ visual appearance
 set nocursorline
+" assumes we've installed lightline or similar status bar upgrade
+set noshowmode
 set ruler
 set visualbell
 colorscheme slate
