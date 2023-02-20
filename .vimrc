@@ -161,3 +161,10 @@ let g:markdown_fenced_languages = ['bash', 'css', 'html', 'javascript', 'js=java
 " use <ctrl-x><ctrl-o> after typing < to trigger
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 
+
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL
