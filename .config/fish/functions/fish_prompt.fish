@@ -1,23 +1,7 @@
-function fish_prompt --description 'Write out the prompt'
-    set -l last_status $status
-
-    prompt_login
-
-    echo -n ':'
-
-    # PWD
-    set_color $fish_color_cwd
-    echo -n (prompt_pwd)
-    set_color normal
-
-    __terlar_git_prompt
-    fish_hg_prompt
-    echo
-
-    if not test $last_status -eq 0
-        set_color $fish_color_error
+function fish_prompt --description 'Screen Savvy prompt'
+    if test -z "$WINDOW"
+        printf '%s%s@%s%s%s%s%s> ' (set_color yellow) $USER (set_color purple) (prompt_hostname) (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
+    else
+        printf '%s%s@%s%s%s(%s)%s%s%s> ' (set_color yellow) $USER (set_color purple) (prompt_hostname) (set_color white) (echo $WINDOW) (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
     end
-
-    echo -n '➤ '
-    set_color normal
 end
