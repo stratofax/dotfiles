@@ -143,3 +143,6 @@ alias gpr='git pull --rebase'
 
 # vim equivalents
 alias :q='exit'
+
+. "$HOME/.asdf/asdf.sh"
+. "$HOME/.asdf/completions/asdf.bash"
