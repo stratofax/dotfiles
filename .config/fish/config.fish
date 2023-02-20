@@ -23,3 +23,4 @@ end
 fish_vi_key_bindings
 
 source ~/.asdf/asdf.fish
+pyenv init - | source
