@@ -1,4 +1,4 @@
-" gloal settings
+" global settings
 " use modern vim features
 set nocompatible
 " block modeline exploits
@@ -96,7 +96,8 @@ map <A-s> :w
 map!<A-s> <Esc>:w
 
 " leader key default is \
-" let mapleader = "\"
+nnoremap <SPACE> <Nop>
+let mapleader = " "
 " edit the .vimrc file in a new vertical split
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 " save with a wordcount, scroll current line to top
