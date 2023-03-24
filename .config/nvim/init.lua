@@ -497,6 +497,10 @@ cmp.setup {
 
 -- Set the colorscheme
 vim.cmd('colorscheme lunaperche')
+-- Set the editor layout
+vim.cmd('set wrap')
+vim.cmd('set linebreak')
+vim.opt.guifont = 'Source Code Pro:h12'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
