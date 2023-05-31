@@ -7,9 +7,6 @@ set modelines=0
 " text wrapping
 set wrap
 set linebreak
-" use spaces, not tabs
-set expandtab
-set tabstop=2
 
 " set conventional backspace
 set backspace=2
@@ -35,30 +32,12 @@ set wildmenu
 set history=10000
 
 """ visual appearance
+colorscheme slate
 set nocursorline
 " assumes we've installed lightline or similar status bar upgrade
 set noshowmode
 set ruler
 set visualbell
-colorscheme slate
-
-" set the prefered colours, pick one line here only.
-" dark grey, better you can get if you don't support 256 colours
-" hi CursorLine   cterm=NONE ctermbg=8 ctermfg=NONE
-" light grey, no 256 colors
-" hi CursorLine   cterm=NONE ctermbg=7 ctermfg=NONE
-" dark redish
-" hi CursorLine   cterm=NONE ctermbg=52 ctermfg=NONE
-" dark bluish
-"hi CursorLine   cterm=NONE ctermbg=17 ctermfg=NONE
-" very light grey
-"hi CursorLine   cterm=NONE ctermbg=254 ctermfg=NONE
-" yelowish
-hi CursorLine   cterm=NONE ctermbg=229 ctermfg=NONE
-" almost black
-" hi CursorLine   cterm=NONE ctermbg=234 ctermfg=NONE
-" bold text on cursoline
-" hi CursorLine term=bold cterm=bold
 
 """ Keyboard
 " break the arrow key habit
@@ -119,9 +98,9 @@ nnoremap <leader>v "+gPA
 " select all with a
 nnoremap <leader>a ggVG
 " save with s
-nnoremap <leader>s :w<CR>
-"quit with q
-nnoremap <leader>q :x<CR>
+nnoremap <leader>s :w<CR>g<C-g>
+"save and quit with q
+nnoremap <leader>q :wqa<CR>
 
 " quicksave, append at end of line
 map! <F5> <Esc>:w<CR>A
@@ -153,7 +132,7 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 20
 augroup ProjectDrawer
   autocmd!
-  autocmd VimEnter * :Vexplore
+  autocmd VimEnter * :Lexplore
 augroup END
 
 " Show syntax highlights in fenced code blocks
@@ -162,7 +141,6 @@ let g:markdown_fenced_languages = ['bash', 'css', 'html', 'javascript', 'js=java
 " use <ctrl-x><ctrl-o> after typing < to trigger
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 
-
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
 packloadall
@@ -170,9 +148,3 @@ packloadall
 " All messages and errors will be ignored.
 silent! helptags ALL
 
-" Enable completion where available.
-" This setting must be set before ALE is loaded.
-"
-" You should not turn this setting on if you wish to use ALE as a completion
-" source for other completion plugins, like Deoplete.
-let g:ale_completion_enabled = 1
