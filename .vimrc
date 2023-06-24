@@ -132,7 +132,7 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 20
 augroup ProjectDrawer
   autocmd!
-  autocmd VimEnter * :Lexplore
+  autocmd VimEnter * :Vexplore
 augroup END
 
 " Show syntax highlights in fenced code blocks
