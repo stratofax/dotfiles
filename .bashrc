@@ -134,3 +134,6 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # Use vi-compatible edit commands (default: emacs)
 set -o vi
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
