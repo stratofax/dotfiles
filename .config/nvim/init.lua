@@ -69,7 +69,7 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   -- My first plugin
-  'github/copilot.vim',
+  -- 'github/copilot.vim',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -506,7 +506,7 @@ vim.cmd('colorscheme lunaperche')
 -- Set the editor layout
 vim.cmd('set wrap')
 vim.cmd('set linebreak')
-vim.opt.guifont = 'Source Code Pro:h14'
+vim.opt.guifont = 'Source Code Pro:h10'
 
 vim.opt.showmode = false
 
