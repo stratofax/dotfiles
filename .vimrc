@@ -142,7 +142,7 @@ let g:markdown_fenced_languages = ['bash', 'css', 'html', 'javascript', 'js=java
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 
 " VimWiki settings
-let g:vimwiki_list = [{'path': '~/repos/slipbox/',
+let g:vimwiki_list = [{'path': '~/Repos/stratofax/slipbox/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
 filetype plugin on
