@@ -81,7 +81,9 @@ let mapleader = " "
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 " save with a wordcount, scroll current line to top
 nnoremap <leader>wc :w<CR>ztg<C-g>
-" insert a Markdown header timestamp, save with wordcount
+" insert the date as a Markdown H1
+nnoremap <leader>gd <Esc>:put =strftime('%Y-%m-%d')<CR>i# 
+" insert a Markdown H2 header timestamp, save with wordcount
 nnoremap <leader>t GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <Esc>:w<CR>o<Esc>zzg<C-g>
 " delete trailing spaces in the current file
 nnoremap <leader>dt :%s/\s\+$//e<CR>
