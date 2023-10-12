@@ -77,12 +77,13 @@ map!<A-s> <Esc>:w
 " leader key default is \
 nnoremap <SPACE> <Nop>
 let mapleader = " "
+
 " edit the .vimrc file in a new vertical split
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 " save with a wordcount, scroll current line to top
 nnoremap <leader>wc :w<CR>ztg<C-g>
 " insert the date as a Markdown H1
-nnoremap <leader>gd <Esc>:put =strftime('%Y-%m-%d')<CR>i# 
+nnoremap <leader>gd <Esc>:put =strftime('%Y-%m-%d')<CR>i# <Esc>kdd
 " insert a Markdown H2 header timestamp, save with wordcount
 nnoremap <leader>t GA<CR><Esc>:put =strftime('%H:%M')<CR>i## <Esc>:w<CR>o<Esc>zzg<C-g>
 " delete trailing spaces in the current file
