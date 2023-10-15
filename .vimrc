@@ -78,6 +78,8 @@ map!<A-s> <Esc>:w
 nnoremap <SPACE> <Nop>
 let mapleader = " "
 
+" Insert a Markdown checkbox
+nnoremap <leader>b i- [ ] 
 " edit the .vimrc file in a new vertical split
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 " save with a wordcount, scroll current line to top
