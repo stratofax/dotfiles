@@ -158,3 +158,5 @@ packloadall
 " All messages and errors will be ignored.
 silent! helptags ALL
 
+" To use fzf in Vim, installed by homebrew
+set rtp+=/opt/homebrew/opt/fzf

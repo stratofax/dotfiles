@@ -148,3 +148,7 @@ if [ -d $HOME/.pyenv ]; then
   eval "$(pyenv init -)"
 fi
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+eval "$(thefuck --alias)"
+

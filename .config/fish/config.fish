@@ -27,4 +27,5 @@ end
 set -gx fish_user_paths $fish_user_paths /usr/local/sbin/ 
 
 fish_vi_key_bindings
+thefuck --alias | source 
 
