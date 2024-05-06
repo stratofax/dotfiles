@@ -22,9 +22,10 @@ else
   set -gx bookmarks /home/neil
   set PATH $PATH /home/neil/.local/bin /home/neil/bin/ /home/neil/.poetry/bin
   set -gx fish_user_paths /home/neil/
+  set -x SSH_AUTH_SOCK ~/.1password/agent.sock
 end
 
-set -gx fish_user_paths $fish_user_paths /usr/local/sbin/ 
+# set -gx fish_user_paths $fish_user_paths /usr/local/sbin/ 
 
 fish_vi_key_bindings
 thefuck --alias | source 
