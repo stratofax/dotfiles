@@ -29,4 +29,4 @@ end
 
 fish_vi_key_bindings
 thefuck --alias | source 
-
+fzf --fish | source
