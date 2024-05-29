@@ -13,6 +13,13 @@ export NVM_DIR="$HOME/.nvm"
 
 eval "$(thefuck --alias)"
 
+# use vim motions
+set -o vi
+
+# reuse .bash_aliases, if available
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
