@@ -160,3 +160,6 @@ case "$(hostname)" in
 esac
 
 
+
+# Created by `pipx` on 2025-06-02 23:41:41
+export PATH="$PATH:/Users/neil/.local/bin"
