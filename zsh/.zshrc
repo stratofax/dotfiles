@@ -117,9 +117,6 @@ PROMPT='%F{green}%n%f@%F{blue}%m%f:%F{yellow}%~%f ${vcs_info_msg_0_}$ '
 PROMPT='%F{039}%n@%m%f in %F{yellow}%~%f $(git_prompt_info)
 %F{red}❯%F{yellow}❯%F{green}❯%f '
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-
 # use vim motions
 set -o vi
 
@@ -127,6 +124,38 @@ set -o vi
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+
+# Platform & computer specific settings
+# Set up fzf key bindings and fuzzy completion
+case "$(uname -s)" in
+  Darwin)
+    source <(fzf --zsh)
+
+    case "$(hostname)" in
+      Messier4.local)
+
+      test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+      export PYENV_ROOT="$HOME/.pyenv"
+      command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+      eval "$(pyenv init -)"
+
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+      export HOMEBREW_CASK_OPTS="--appdir=/Volumes/990Pro2TB/Apps"
+
+      ;;
+    esac
+    ;;
+  Linux)
+    # enable fzf keybindings for Zsh:
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    # enable fuzzy auto-completion for Zsh:
+    source /usr/share/doc/fzf/examples/completion.zsh
+
+esac
 
 # App-specific configuration
 # fabric
@@ -138,28 +167,7 @@ fi
 export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
 
-case "$(hostname)" in
-  Messier4.local)
 
-    test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# Created by `pipx` on 2024-06-01 19:12:00
+export PATH="$PATH:$HOME/.local/bin"
 
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-    export HOMEBREW_CASK_OPTS="--appdir=/Volumes/990Pro2TB/Apps"
-
-    # Created by `pipx` on 2024-06-01 19:12:00
-    export PATH="$PATH:$HOME/.local/bin"
-    ;;
-esac
-
-
-
-# Created by `pipx` on 2025-06-02 23:41:41
-export PATH="$PATH:/Users/neil/.local/bin"
