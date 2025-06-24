@@ -125,29 +125,18 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+# Define a base directory for your Zsh config snippets
+ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
+# Source local, non-versioned settings (for secrets, etc.)
+# Make sure to add this file to your .gitignore if your dotfiles are in a public repo
+[ -f "${ZSH_CONFIG_DIR}/local.zsh" ] && source "${ZSH_CONFIG_DIR}/local.zsh"
+
 # Platform & computer specific settings
 # Set up fzf key bindings and fuzzy completion
 case "$(uname -s)" in
   Darwin)
     source <(fzf --zsh)
-
-    case "$(hostname)" in
-      Messier4.local)
-
-      test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-      export PYENV_ROOT="$HOME/.pyenv"
-      command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-      eval "$(pyenv init -)"
-
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-      export HOMEBREW_CASK_OPTS="--appdir=/Volumes/990Pro2TB/Apps"
-
-      ;;
-    esac
     ;;
   Linux)
     # enable fzf keybindings for Zsh:
