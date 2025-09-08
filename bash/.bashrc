@@ -129,10 +129,18 @@ echo $PATH | grep -Eq "(^|:)/usr/sbin(:|)" || PATH=$PATH:/usr/sbin
 
 # set up environment for dev tools, if present
 # set nvm if config data is present
-if [ -d $HOME/.config/nvm ]; then
+# Check for standard nvm installation (~/.nvm) first, then brew installation (~/.config/nvm)
+# This handles both the default distribution script installation and macOS homebrew installation
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+elif [ -d "$HOME/.config/nvm" ]; then
   export NVM_DIR="$HOME/.config/nvm"
+fi
+
+# Only configure nvm environment if either installation directory was found
+if [ -n "$NVM_DIR" ]; then
   # This loads nvm
-  [ "NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
   # This loads nvm bash_completion 
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 fi
