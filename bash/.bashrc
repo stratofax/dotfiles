@@ -135,5 +135,8 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-eval "$(thefuck --alias)"
+# Only initialize thefuck if it's installed
+if command -v thefuck >/dev/null 2>&1; then
+  eval "$(thefuck --alias)"
+fi
 

@@ -7,13 +7,14 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# Note: .bashrc sources .profile, so we don't source .bashrc from here to avoid circular dependency
 # if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
-fi
+# if [ -n "$BASH_VERSION" ]; then
+#     # include .bashrc if it exists
+#     if [ -f "$HOME/.bashrc" ]; then
+# 	. "$HOME/.bashrc"
+#     fi
+# fi
 
 # nvm - Node Version Manager
 # Check for standard nvm installation (~/.nvm) first, then brew installation (~/.config/nvm)
