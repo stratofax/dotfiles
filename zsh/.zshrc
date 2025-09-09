@@ -147,6 +147,11 @@ case "$(uname -s)" in
 esac
 
 # App-specific configuration
+# Source shared development tools configuration from .profile
+if [ -f ~/.profile ]; then
+  . ~/.profile
+fi
+
 # fabric
 if [ -f "$HOME/.config/fabric/fabric-bootstrap.inc" ]; then 
   . "$HOME/.config/fabric/fabric-bootstrap.inc" 

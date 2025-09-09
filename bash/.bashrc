@@ -128,31 +128,9 @@ echo $PATH | grep -Eq "(^|:)/sbin(:|)"     || PATH=$PATH:/sbin
 echo $PATH | grep -Eq "(^|:)/usr/sbin(:|)" || PATH=$PATH:/usr/sbin
 
 # set up environment for dev tools, if present
-# set nvm if config data is present
-# Check for standard nvm installation (~/.nvm) first, then brew installation (~/.config/nvm)
-# This handles both the default distribution script installation and macOS homebrew installation
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-elif [ -d "$HOME/.config/nvm" ]; then
-  export NVM_DIR="$HOME/.config/nvm"
-fi
-
-# Only configure nvm environment if either installation directory was found
-if [ -n "$NVM_DIR" ]; then
-  # This loads nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
-  # This loads nvm bash_completion 
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
-fi
-
-if [ -f $HOME/.cargo/env ]; then
-  . "$HOME/.cargo/env"
-fi
-
-if [ -d $HOME/.pyenv ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
+# Source shared development tools configuration from .profile
+if [ -f ~/.profile ]; then
+  . ~/.profile
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
