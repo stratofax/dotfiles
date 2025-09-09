@@ -58,8 +58,6 @@ case "$(uname -s)" in
     export BOOKMARKS="/Users/neil"
     ;;
   Linux)
-    # 1Password SSH agent integration
-    export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
     export BOOKMARKS="/home/neil"
     ;;
 esac
