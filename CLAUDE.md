@@ -76,7 +76,13 @@ Since this is a dotfiles repository, there are no build, test, or lint commands.
 ## Platform Considerations
 
 The configuration includes conditional logic for different platforms:
-- macOS: Uses homebrew paths, different bookmarks location
-- Linux: Standard Linux paths, 1Password SSH agent configuration
+- macOS: Uses homebrew paths, different bookmarks location  
+- Linux: Standard Linux paths, BOOKMARKS environment variable
 
 When modifying configurations, ensure platform-specific sections are maintained appropriately.
+
+## Troubleshooting Notes
+
+- **SSH Agent**: Configuration uses standard SSH agent, not 1Password integration
+- **pyenv**: Includes defensive checks to prevent errors when pyenv is not installed
+- **tmux character display**: Updated configuration supports UTF-8 and modern terminal features
