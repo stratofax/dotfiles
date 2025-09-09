@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a personal dotfiles repository managed with GNU `stow` for symlink management. The repository contains configuration files for various shell environments and development tools:
 
-- `bash/` - Bash shell configuration (.bashrc, .bash_aliases, .bash_prompt)
+- `bash/` - Bash shell configuration (.bashrc, .bash_aliases, .bash_prompt, .profile)
 - `fish/` - Fish shell configuration with custom abbreviations and platform-specific paths
 - `zsh/` - Zsh configuration using Oh My Zsh framework
 - `nvim/` - Neovim configuration based on Kickstart.nvim template using lazy.nvim package manager
@@ -29,22 +29,31 @@ This creates symlinks from the home directory to the configuration files in this
 
 ## Shell Configuration Architecture
 
-The repository supports multiple shells with cross-platform compatibility:
+The repository supports multiple shells with cross-platform compatibility using a shared configuration approach:
+
+### Shared Configuration (.profile)
+- **Centralized development tools setup** - nvm, cargo/rust, pyenv configurations
+- **Cross-platform PATH management** - handles macOS homebrew paths and Linux-specific settings  
+- **DRY principle implementation** - eliminates code duplication across shells
+- **Platform detection** - automatic macOS vs Linux environment setup
+- **Standard compliance** - follows Unix convention for login shell configuration
 
 ### Fish Shell (fish/)
 - Uses abbreviations (abbr) for common git and system operations
-- Platform detection for macOS vs Linux with different PATH configurations
+- Platform-specific configurations (separate from .profile due to syntax differences)
 - Vi key bindings enabled
-- 1Password SSH agent integration on Linux
+- Custom PATH and environment setup
 
 ### Bash (bash/)
+- **Sources .profile** for shared development tools configuration
 - Vi mode enabled (`set -o vi`)
 - Custom prompt configuration in separate `.bash_prompt` file
 - History control with ignoreboth setting
 
 ### Zsh (zsh/)
+- **Sources .profile** for shared development tools configuration
 - Uses Oh My Zsh framework with robbyrussell theme
-- Standard Oh My Zsh configuration structure
+- Custom prompt with git integration
 
 ## Neovim Configuration
 

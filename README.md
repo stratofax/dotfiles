@@ -68,3 +68,22 @@ stow --conflicts .
 stow --verbose .
 ```
 
+## Configuration Principles
+
+This dotfiles repository follows these key principles:
+
+### DRY (Don't Repeat Yourself)
+- **Shared `.profile`** - Development tools configuration (nvm, cargo, pyenv, PATH) is centralized
+- **Single source of truth** - Changes to development environments only need to be made once
+- **Cross-shell compatibility** - Both bash and zsh source the same shared configuration
+
+### Consistency
+- **Standardized setup** - All shells get identical development tool configurations
+- **Platform detection** - Automatic handling of macOS vs Linux differences
+- **Uniform aliases** - Common git and system aliases across shells
+
+### Simplification  
+- **Reduced complexity** - Eliminated duplicate configuration blocks
+- **Standard compliance** - Uses conventional Unix `.profile` approach
+- **Maintainability** - Easier to update and debug configuration issues
+
