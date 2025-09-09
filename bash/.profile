@@ -41,7 +41,10 @@ fi
 if [ -d "$HOME/.pyenv" ]; then
   export PYENV_ROOT="$HOME/.pyenv"
   command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
+  # Only initialize pyenv if the command is actually available
+  if command -v pyenv >/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+  fi
 fi
 
 # Common PATH additions
