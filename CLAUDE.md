@@ -22,8 +22,36 @@ The dotfiles use GNU `stow` for symlink management:
 
 ```bash
 cd ~/dotfiles
-stow --adopt .
+# Always test with simulation first to avoid issues
+stow --simulate --verbose .
+# If simulation looks correct, then run:
+stow .
 ```
+
+**Important**: Always use `stow --simulate --verbose` before running actual stow commands, especially when:
+- Working with a new dotfiles setup
+- Adding new packages to stow  
+- Using `--adopt` (which can move files around unexpectedly)
+- Troubleshooting stow conflicts
+
+### Stow Best Practices
+
+**Safe workflow for stow operations:**
+1. `git status` - Ensure clean working directory
+2. `stow --simulate --verbose <package>` - Test individual packages first
+3. `stow <package>` - Apply if simulation looks correct
+4. Verify symlinks: `find ~ -maxdepth 1 -type l -ls`
+
+**Common stow commands:**
+- `stow <package>` - Install specific package (e.g., `stow fish`)
+- `stow --delete <package>` - Remove package symlinks
+- `stow --restow <package>` - Re-stow package (useful after updates)
+- `stow --target=/path <package>` - Stow to different directory
+
+**Avoiding conflicts:**
+- Use `.stow-local-ignore` to exclude files from stowing
+- Back up existing dotfiles before first stow
+- Use `--adopt` only when you want to move existing files into the repo
 
 This creates symlinks from the home directory to the configuration files in this repository.
 
@@ -67,7 +95,8 @@ The Neovim setup is based on Kickstart.nvim:
 
 Since this is a dotfiles repository, there are no build, test, or lint commands. The primary operations are:
 
-- `stow --adopt .` - Install/update dotfile symlinks
+- `stow --simulate --verbose .` - Test stow operations safely before applying
+- `stow .` - Install/update dotfile symlinks (run simulation first!)
 - `git status` - Check repository status
 - `git add <files>` - Stage changes
 - `git commit -m "message"` - Commit changes
@@ -83,6 +112,14 @@ When modifying configurations, ensure platform-specific sections are maintained 
 
 ## Troubleshooting Notes
 
+### Stow Issues
+- **"already exists" conflicts**: Use `stow --simulate` to identify conflicts, backup/move existing files
+- **Directory nesting issues**: Check for `.config/` subdirectories created by `--adopt`, move files to correct locations
+- **Missing symlinks**: Verify you're in the correct directory (`/home/neil/dotfiles`) when running stow
+- **Wrong symlink targets**: Use `stow --delete` then `stow` again to recreate correct symlinks
+
+### Configuration Issues
 - **SSH Agent**: Configuration uses standard SSH agent, not 1Password integration
 - **pyenv**: Includes defensive checks to prevent errors when pyenv is not installed
 - **tmux character display**: Updated configuration supports UTF-8 and modern terminal features
+
