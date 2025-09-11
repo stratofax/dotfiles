@@ -9,7 +9,7 @@ elseif has("gui_win32")
   colorscheme ron
 elseif has("gui_macvim")
   " MacVim
-  set guifont=Source\ Code\ Pro:h16 
+  set guifont=SourceCodeProRoman-Regular:h18 
 else
   echo "Unknown GUI system!!!!"
 endif
