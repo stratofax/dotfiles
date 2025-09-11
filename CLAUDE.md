@@ -23,10 +23,14 @@ The dotfiles use GNU `stow` for symlink management:
 ```bash
 cd ~/dotfiles
 # Always test with simulation first to avoid issues
-stow --simulate --verbose .
-# If simulation looks correct, then run:
-stow .
+stow --simulate --verbose bash git vim zsh tmux fzf
+# If simulation looks correct, then run individual packages:
+stow bash git vim zsh tmux fzf
+# For .config structure (be cautious of directory symlinks):
+stow .config
 ```
+
+**AVOID**: `stow .` (creates unwanted package directory symlinks in home directory)
 
 **Important**: Always use `stow --simulate --verbose` before running actual stow commands, especially when:
 - Working with a new dotfiles setup
@@ -41,6 +45,12 @@ stow .
 2. `stow --simulate --verbose <package>` - Test individual packages first
 3. `stow <package>` - Apply if simulation looks correct
 4. Verify symlinks: `find ~ -maxdepth 1 -type l -ls`
+5. Remove any unwanted package directory symlinks from home directory
+
+**Recommended stow commands:**
+- `stow bash git vim zsh tmux fzf` - Install home directory configs
+- `stow .config` - Install ~/.config/ structure (watch for directory symlinks)
+- **AVOID**: `stow .` - Creates package directory symlinks in home directory
 
 **Common stow commands:**
 - `stow <package>` - Install specific package (e.g., `stow fish`)
@@ -95,8 +105,9 @@ The Neovim setup is based on Kickstart.nvim:
 
 Since this is a dotfiles repository, there are no build, test, or lint commands. The primary operations are:
 
-- `stow --simulate --verbose .` - Test stow operations safely before applying
-- `stow .` - Install/update dotfile symlinks (run simulation first!)
+- `stow --simulate --verbose <package>` - Test individual package operations safely before applying
+- `stow bash git vim zsh tmux fzf` - Install/update home directory dotfile symlinks
+- `stow .config` - Install/update ~/.config/ structure (watch for unwanted directory symlinks)
 - `git status` - Check repository status
 - `git add <files>` - Stage changes
 - `git commit -m "message"` - Commit changes
@@ -115,8 +126,10 @@ When modifying configurations, ensure platform-specific sections are maintained 
 ### Stow Issues
 - **"already exists" conflicts**: Use `stow --simulate` to identify conflicts, backup/move existing files
 - **Directory nesting issues**: Check for `.config/` subdirectories created by `--adopt`, move files to correct locations
+- **Package directory symlinks in home**: `stow .` creates unwanted symlinks like `~/git`, `~/zsh` - remove these and use individual package stowing instead
 - **Missing symlinks**: Verify you're in the correct directory (`/home/neil/dotfiles`) when running stow
 - **Wrong symlink targets**: Use `stow --delete` then `stow` again to recreate correct symlinks
+- **Directory vs file conflicts**: When stow tries to create directory symlinks but individual files are needed, stow individual packages rather than using `stow .`
 
 ### Configuration Issues
 - **SSH Agent**: Configuration uses standard SSH agent, not 1Password integration
