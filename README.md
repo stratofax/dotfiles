@@ -21,25 +21,36 @@ cd
 # clone this repo
 git clone git@github.com:stratofax/dotfiles.git
 cd ~/dotfiles
-stow --adopt .
+
+# IMPORTANT: Always test with simulation first!
+stow --simulate --verbose bash git vim zsh tmux fzf
+# If simulation looks correct, then install individual packages:
+stow bash git vim zsh tmux fzf
+# For .config structure:
+stow .config
 ```
 
 ## Usage
 
 ### Management Commands
 
+⚠️ **CRITICAL WARNING**: Avoid `stow .` as it creates unwanted package directory symlinks in your home directory (like `~/git`, `~/zsh`). Use individual package management instead.
+
 ```bash
-# Re-link all packages (useful after updates)
-stow --restow .
+# RECOMMENDED: Re-link individual packages (safe)
+stow --restow bash git vim zsh tmux fzf
 
-# Remove all symlinks (for uninstalling)
-stow --delete .
+# DANGEROUS: This creates unwanted directory symlinks - AVOID
+# stow --restow .
 
-# Dry run to preview what would be linked
-stow -n --verbose .
+# SAFE: Remove individual packages
+stow --delete bash git vim zsh tmux fzf
 
-# Explicitly set target directory
-stow --target=$HOME .
+# ALWAYS test operations first with simulation
+stow --simulate --verbose <package>
+
+# Show detailed output of what's being linked
+stow --verbose <package>
 ```
 
 ### Individual Package Management
@@ -61,12 +72,37 @@ stow --restow fish
 ### Troubleshooting
 
 ```bash
+# ALWAYS simulate first to identify conflicts
+stow --simulate --verbose <package>
+
 # Check for conflicting files before linking
-stow --conflicts .
+stow --conflicts <package>
 
 # Show detailed output of what's being linked
-stow --verbose .
+stow --verbose <package>
 ```
+
+### ⚠️ Critical Safety Guidelines
+
+**ALWAYS DO BEFORE STOWING:**
+1. `git status` - Ensure clean working directory
+2. `stow --simulate --verbose <package>` - Test individual packages first
+3. Verify simulation output looks correct before proceeding
+
+**COMMANDS TO AVOID:**
+- ❌ `stow .` - Creates unwanted package directory symlinks in home directory
+- ❌ `stow --adopt .` - Can move files around unexpectedly without simulation
+
+**SAFE WORKFLOW:**
+- ✅ Use individual package names: `stow bash git vim zsh tmux fzf`
+- ✅ Always simulate first: `stow --simulate --verbose <package>`
+- ✅ Verify symlinks after: `find ~ -maxdepth 1 -type l -ls`
+- ✅ Remove any unwanted package directory symlinks from home directory
+
+**COMMON ISSUES:**
+- **Package directory symlinks in home**: If you accidentally ran `stow .`, remove unwanted symlinks like `~/git`, `~/zsh` from your home directory
+- **"already exists" conflicts**: Use simulation to identify conflicts, backup/move existing files
+- **Wrong symlink targets**: Use `stow --delete <package>` then `stow <package>` again
 
 ## Configuration Principles
 
