@@ -1,6 +1,6 @@
 # dotfiles
 
-This `dotfiles` repo contains my set of "dotfiles" and is intended to be used with GNU `stow`.
+This repository provides a cross-platform solution for sharing configuration files across multiple computers and platforms using GNU `stow` for symlink management.
 
 ## Requirements
 
@@ -11,8 +11,24 @@ Install using the computer's package manager, such as `apt` or `brew`.
 
 ## Installation
 
-1. Back up your existing dot files by either moving or renaming them.
-2. Run the following script:
+### 1. Back Up Existing Configuration Files
+
+**CRITICAL**: Back up your existing dotfiles before installation to avoid losing your current configurations.
+
+```bash
+# Create backup directory
+mkdir ~/dotfiles-backup-$(date +%Y%m%d)
+
+# Back up common configuration files (adjust paths as needed)
+cp ~/.bashrc ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+cp ~/.bash_profile ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+cp ~/.zshrc ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+cp ~/.vimrc ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+cp ~/.gitconfig ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+cp ~/.tmux.conf ~/dotfiles-backup-$(date +%Y%m%d)/ 2>/dev/null || true
+```
+
+### 2. Install Dotfiles
 
 
 ```bash
@@ -26,8 +42,20 @@ cd ~/dotfiles
 stow --simulate --verbose bash git vim zsh tmux fzf
 # If simulation looks correct, then install individual packages:
 stow bash git vim zsh tmux fzf
-# For .config structure:
+# For .config structure (be cautious of directory symlinks):
 stow .config
+```
+
+### 3. Verify Installation
+
+After installation, verify that symlinks were created correctly:
+
+```bash
+# Check that symlinks point to your dotfiles repository
+ls -la ~/.bashrc ~/.gitconfig ~/.vimrc ~/.tmux.conf
+
+# Verify they point to ~/dotfiles/ (should show -> /home/username/dotfiles/...)
+find ~ -maxdepth 1 -type l -ls | grep dotfiles
 ```
 
 ## Usage
@@ -104,22 +132,87 @@ stow --verbose <package>
 - **"already exists" conflicts**: Use simulation to identify conflicts, backup/move existing files
 - **Wrong symlink targets**: Use `stow --delete <package>` then `stow <package>` again
 
-## Configuration Principles
+### 🚨 Recovery Procedures
 
-This dotfiles repository follows these key principles:
+**If you accidentally ran `stow .`:**
 
-### DRY (Don't Repeat Yourself)
+1. **Identify unwanted package directory symlinks in your home directory:**
+   ```bash
+   find ~ -maxdepth 1 -type l -ls | grep dotfiles
+   ```
+
+2. **Remove unwanted package directory symlinks** (like `~/bash`, `~/git`, `~/zsh`):
+   ```bash
+   # CAREFUL: Only remove package directory symlinks, not individual config file symlinks
+   rm ~/bash ~/git ~/zsh ~/vim ~/nvim ~/tmux  # adjust based on what you find
+   ```
+
+3. **Re-stow individual packages correctly:**
+   ```bash
+   cd ~/dotfiles
+   stow --simulate --verbose bash git vim zsh tmux fzf  # verify first
+   stow bash git vim zsh tmux fzf  # then apply
+   ```
+
+**If stow conflicts prevent installation:**
+
+1. **Identify conflicting files:**
+   ```bash
+   stow --simulate --verbose <package>  # shows conflicts
+   ```
+
+2. **Move conflicting files to backup:**
+   ```bash
+   mv ~/.bashrc ~/.bashrc.backup  # example for bashrc conflict
+   ```
+
+3. **Retry stowing:**
+   ```bash
+   stow <package>
+   ```
+
+## Configuration Architecture
+
+This dotfiles repository supports multiple shells with cross-platform compatibility:
+
+### Repository Structure
+- `bash/` - Bash shell configuration (.bashrc, .bash_aliases, .bash_prompt, .profile)
+- `fish/` - Fish shell configuration with custom abbreviations and platform-specific paths
+- `zsh/` - Zsh configuration using Oh My Zsh framework
+- `nvim/` - Neovim configuration based on Kickstart.nvim template using lazy.nvim package manager
+- `vim/` - Vim configuration files
+- `tmux/` - Terminal multiplexer configuration
+- `git/` - Git configuration files
+- `fzf/` - Fuzzy finder configuration
+- `omf/` - Oh My Fish framework configuration
+
+### Shell Configuration Philosophy
+
+**Shared Configuration (.profile):**
+- **Centralized development tools** - nvm, cargo/rust, pyenv configurations
+- **Cross-platform PATH management** - handles macOS homebrew paths and Linux-specific settings
+- **Platform detection** - automatic macOS vs Linux environment setup
+- **Standard Unix compliance** - follows login shell conventions
+
+**Shell-Specific Features:**
+- **Fish Shell** - Uses abbreviations (abbr), vi key bindings, platform-specific configurations
+- **Bash** - Sources .profile, vi mode enabled, custom prompt configuration
+- **Zsh** - Sources .profile, Oh My Zsh framework with robbyrussell theme
+
+### Configuration Principles
+
+**DRY (Don't Repeat Yourself):**
 - **Shared `.profile`** - Development tools configuration (nvm, cargo, pyenv, PATH) is centralized
 - **Single source of truth** - Changes to development environments only need to be made once
 - **Cross-shell compatibility** - Both bash and zsh source the same shared configuration
 
-### Consistency
+**Consistency & Simplification:**
 - **Standardized setup** - All shells get identical development tool configurations
 - **Platform detection** - Automatic handling of macOS vs Linux differences
-- **Uniform aliases** - Common git and system aliases across shells
-
-### Simplification  
-- **Reduced complexity** - Eliminated duplicate configuration blocks
 - **Standard compliance** - Uses conventional Unix `.profile` approach
-- **Maintainability** - Easier to update and debug configuration issues
+
+### Platform Considerations
+- **macOS**: Uses homebrew paths, different bookmarks location
+- **Linux**: Standard Linux paths, BOOKMARKS environment variable
+- Automatic platform detection ensures proper PATH and tool configurations
 
