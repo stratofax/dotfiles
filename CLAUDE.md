@@ -4,17 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Structure
 
-This is a personal dotfiles repository managed with GNU `stow` for symlink management. The repository contains configuration files for various shell environments and development tools:
+This repository provides a cross-platform solution for sharing configuration files across multiple computers and platforms using GNU `stow` for symlink management. The repository contains configuration files organized by application/tool:
 
-- `bash/` - Bash shell configuration (.bashrc, .bash_aliases, .bash_prompt, .profile)
-- `fish/` - Fish shell configuration with custom abbreviations and platform-specific paths
-- `zsh/` - Zsh configuration using Oh My Zsh framework
-- `nvim/` - Neovim configuration based on Kickstart.nvim template using lazy.nvim package manager
-- `vim/` - Vim configuration files
-- `tmux/` - Terminal multiplexer configuration
-- `git/` - Git configuration files
-- `fzf/` - Fuzzy finder configuration
-- `omf/` - Oh My Fish framework configuration
+- `bash/` - Bash shell configuration files (.bashrc, .bash_aliases, .bash_prompt, .profile)
+- `fish/` - Fish shell configuration files
+- `zsh/` - Zsh shell configuration files  
+- `nvim/` - Neovim editor configuration files
+- `vim/` - Vim editor configuration files
+- `tmux/` - Terminal multiplexer configuration files
+- `git/` - Git version control configuration files
+- `fzf/` - Fuzzy finder configuration files
+- `omf/` - Oh My Fish framework configuration files
 
 ## Installation and Setup
 
@@ -63,55 +63,86 @@ stow .config
 - Back up existing dotfiles before first stow
 - Use `--adopt` only when you want to move existing files into the repo
 
+### .stow-local-ignore Usage
+The `.stow-local-ignore` file (placed in package directories) excludes specific files from being stowed:
+
+**File format (Perl regex patterns):**
+```
+# Comments start with #
+\.git.*          # Ignore all git files
+README.*         # Ignore README files
+\.DS_Store       # Ignore macOS metadata
+.*\.bak$         # Ignore backup files ending in .bak
+temp/            # Ignore temp directory
+```
+
+**Common use cases:**
+- Exclude development files (README, .git, etc.) from being linked to home directory
+- Skip platform-specific files that shouldn't be shared across computers
+- Ignore temporary or backup files
+- Exclude files that should remain local to the repository
+
+**Location:** Place `.stow-local-ignore` in the root of each package directory (e.g., `bash/.stow-local-ignore`, `nvim/.stow-local-ignore`)
+
 This creates symlinks from the home directory to the configuration files in this repository.
 
-## Shell Configuration Architecture
+## Cross-Platform Configuration Architecture
 
-The repository supports multiple shells with cross-platform compatibility using a shared configuration approach:
+The repository supports multiple shells and platforms using a shared configuration approach to ensure consistency across different computers:
 
-### Shared Configuration (.profile)
-- **Centralized development tools setup** - nvm, cargo/rust, pyenv configurations
-- **Cross-platform PATH management** - handles macOS homebrew paths and Linux-specific settings  
-- **DRY principle implementation** - eliminates code duplication across shells
-- **Platform detection** - automatic macOS vs Linux environment setup
-- **Standard compliance** - follows Unix convention for login shell configuration
+### Shared Configuration Strategy
+- **Centralized shared settings** - Common configurations stored in .profile for cross-shell compatibility
+- **Cross-platform PATH management** - Handles different platform-specific paths and environment variables
+- **DRY principle implementation** - Eliminates duplication of configuration across shells and platforms
+- **Platform detection** - Automatic detection and configuration for macOS vs Linux environments
+- **Standard compliance** - Follows Unix conventions for maximum compatibility
 
-### Fish Shell (fish/)
-- Uses abbreviations (abbr) for common git and system operations
-- Platform-specific configurations (separate from .profile due to syntax differences)
-- Vi key bindings enabled
-- Custom PATH and environment setup
+### Shell Configuration Files
+- **Fish Shell (fish/)** - Platform-specific configurations (separate syntax from other shells)
+- **Bash (bash/)** - Sources shared .profile for common settings, plus bash-specific configurations
+- **Zsh (zsh/)** - Sources shared .profile for common settings, plus zsh-specific configurations
 
-### Bash (bash/)
-- **Sources .profile** for shared development tools configuration
-- Vi mode enabled (`set -o vi`)
-- Custom prompt configuration in separate `.bash_prompt` file
-- History control with ignoreboth setting
+### Cross-Platform Compatibility
+The configuration files include conditional logic and platform detection to ensure proper operation across different operating systems and environments.
 
-### Zsh (zsh/)
-- **Sources .profile** for shared development tools configuration
-- Uses Oh My Zsh framework with robbyrussell theme
-- Custom prompt with git integration
+## Computer-Specific Branch Strategy
 
-## Neovim Configuration
+This repository uses separate branches for different computers to handle machine-specific configurations:
 
-The Neovim setup is based on Kickstart.nvim:
-- Uses lazy.nvim as package manager
-- Space key configured as leader
-- Lua-based configuration in `nvim/init.lua`
-- Additional Lua modules in `nvim/lua/` directory
+### Branch Naming Convention
+- `main` - Shared configurations that work across all computers
+- `linux-mint-baby-dell` - Specific configurations for Linux Mint on Baby Dell computer
+- `macos-macbook-pro` - Specific configurations for macOS MacBook Pro (example)
+
+### Workflow for Computer-Specific Changes
+1. **Work on computer-specific branch**: `git checkout linux-mint-baby-dell`
+2. **Make configuration changes** specific to that computer
+3. **Test with stow simulation**: `stow --simulate --verbose <package>`
+4. **Commit changes**: Include computer context in commit message
+5. **Push to computer-specific branch**: `git push origin linux-mint-baby-dell`
+6. **Merge shared changes to main** when configurations are proven to work across platforms
+
+### Branch Management
+- **Keep main branch clean** - Only merge configurations proven to work cross-platform
+- **Use computer branches for experimentation** - Test new configurations safely
+- **Cherry-pick or merge** successful configurations from computer branches to main
+- **Pull from main regularly** to keep computer branches updated with shared improvements
 
 ## Common Development Commands
 
 Since this is a dotfiles repository, there are no build, test, or lint commands. The primary operations are:
 
+### Stow Operations
 - `stow --simulate --verbose <package>` - Test individual package operations safely before applying
 - `stow bash git vim zsh tmux fzf` - Install/update home directory dotfile symlinks
 - `stow .config` - Install/update ~/.config/ structure (watch for unwanted directory symlinks)
+
+### Git Operations
 - `git status` - Check repository status
+- `git checkout <computer-branch>` - Switch to computer-specific branch
 - `git add <files>` - Stage changes
-- `git commit -m "message"` - Commit changes
-- `git push` - Push to remote repository
+- `git commit -m "message"` - Commit changes (include computer context for computer-specific changes)
+- `git push origin <computer-branch>` - Push to computer-specific remote branch
 
 ## Platform Considerations
 
@@ -131,8 +162,8 @@ When modifying configurations, ensure platform-specific sections are maintained 
 - **Wrong symlink targets**: Use `stow --delete` then `stow` again to recreate correct symlinks
 - **Directory vs file conflicts**: When stow tries to create directory symlinks but individual files are needed, stow individual packages rather than using `stow .`
 
-### Configuration Issues
-- **SSH Agent**: Configuration uses standard SSH agent, not 1Password integration
-- **pyenv**: Includes defensive checks to prevent errors when pyenv is not installed
-- **tmux character display**: Updated configuration supports UTF-8 and modern terminal features
+### Cross-Platform Issues
+- **Platform detection**: Ensure conditional logic properly detects macOS vs Linux environments
+- **PATH differences**: Verify platform-specific paths are correctly configured in shared .profile
+- **Symlink compatibility**: Check that symlinks work correctly across different filesystems and platforms
 
