@@ -84,7 +84,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	command -v sha1sum > /dev/null || alias sha1sum="shasum"
 
 	# Show active network interfaces
-	alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+	alias ifactive="ifconfig | grep -B 10 'status: active' | grep '^[a-z]' | cut -d: -f1"
 
 	# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
 	alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
