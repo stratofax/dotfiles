@@ -18,8 +18,7 @@ zstyle ':vcs_info:git:*' formats '%F{cyan}(%b)%f '
 
 # Set up the prompt with git branch name
 setopt PROMPT_SUBST
-PROMPT='%F{green}%n%f@%F{blue}%m%f:%F{yellow}%~%f ${vcs_info_msg_0_}$ '
-PROMPT='%F{039}%n@%m%f in %F{yellow}%~%f $(git_prompt_info)
+PROMPT='%F{039}%n@%m%f in %F{yellow}%~%f ${vcs_info_msg_0_}
 %F{red}❯%F{yellow}❯%F{green}❯%f '
 
 # use vim motions
