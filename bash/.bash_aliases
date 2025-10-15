@@ -162,3 +162,7 @@ alias gpr='git pull --rebase'
 
 # vim equivalents
 alias :q='exit'
+
+## ssh agent
+
+alias ssha='eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519'
