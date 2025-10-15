@@ -164,5 +164,10 @@ alias gpr='git pull --rebase'
 alias :q='exit'
 
 ## ssh agent
-
-alias ssha='eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    alias ssha='eval "$(ssh-agent -s)" && ssh-add --apple-use-keychain ~/.ssh/id_ed25519'
+else
+    # Linux or other
+    alias ssha='eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519'
+fi
