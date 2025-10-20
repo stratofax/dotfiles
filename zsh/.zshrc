@@ -45,13 +45,9 @@ case "$(uname -s)" in
     ;;
 
   Linux)
-    if [ -f ~/.fzf.zsh ]; then
-        source ~/.fzf.zsh
-        # enable fzf keybindings for Zsh:
-        source /usr/share/doc/fzf/examples/key-bindings.zsh
-        # enable fuzzy auto-completion for Zsh:
-        source /usr/share/doc/fzf/examples/completion.zsh
-    fi
+    # enable fzf keybindings and completion for Zsh:
+    [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+    [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
     ;;
 
 esac
