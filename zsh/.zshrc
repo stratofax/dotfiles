@@ -57,6 +57,7 @@ case "$(uname -s)" in
     # enable fzf keybindings and completion for Zsh:
     [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
     [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+    [ -f /home/neil/.claude/local/claude ] && alias claude="/home/neil/.claude/local/claude"
     ;;
 
 esac
@@ -76,7 +77,6 @@ fi
 export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 # Created by `pipx` on 2024-06-01 19:12:00
 export PATH="$PATH:$HOME/.local/bin"
-alias claude="/home/neil/.claude/local/claude"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
