@@ -17,20 +17,27 @@
 # fi
 
 # nvm - Node Version Manager
-# Check for standard nvm installation (~/.nvm) first, then brew installation (~/.config/nvm)
-# This handles both the default distribution script installation and macOS homebrew installation
-if [ -d "$HOME/.nvm" ]; then
+# Supports three installation methods:
+# 1. Standard nvm script installation (~/.nvm)
+# 2. Alternative user installation (~/.config/nvm)
+# 3. Homebrew installation (/opt/homebrew/opt/nvm)
+
+# Check for Homebrew installation first (macOS)
+if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
   export NVM_DIR="$HOME/.nvm"
+  [ ! -d "$NVM_DIR" ] && mkdir -p "$NVM_DIR"  # Create working directory if needed
+  \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# Check for standard nvm installation
+elif [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Check for alternative user installation
 elif [ -d "$HOME/.config/nvm" ]; then
   export NVM_DIR="$HOME/.config/nvm"
-fi
-
-# Only configure nvm environment if either installation directory was found
-if [ -n "$NVM_DIR" ]; then
-  # This loads nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
-  # This loads nvm bash_completion 
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
 # Rust/Cargo environment
