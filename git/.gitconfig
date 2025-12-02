@@ -1,3 +1,12 @@
+# This is Git's per-user configuration file.
 [user]
-	email = neil@cadent.com
-	name = Neil Johnson
+# Please adapt and uncomment the following lines:
+name = Neil Johnson
+	email = neil@cadent.net
+	signingkey = /Users/neil/.ssh/id_ed25519
+[gpg]
+	format = ssh
+[commit]
+	gpgSign = true
+[alias]
+	cleanup = !git fetch origin --prune && git branch -vv | grep \": gone]\" | awk \"{print \\$1}\" | xargs git branch -d
