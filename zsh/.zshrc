@@ -58,6 +58,12 @@ case "$(uname -s)" in
     [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
     [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
     [ -f /home/neil/.claude/local/claude ] && alias claude="/home/neil/.claude/local/claude"
+
+    case "$(hostname)" in
+      baby-dell)
+        # Baby Dell specific settings
+        ;;
+    esac
     ;;
 
 esac
