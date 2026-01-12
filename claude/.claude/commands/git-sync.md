@@ -18,9 +18,10 @@ Determine the execution mode:
 
 ### Phase 1: Pre-flight Check
 
-1. Run `git status` to check current state
-2. Run `git fetch --prune` to see if remote has changes (prune removes stale tracking branches)
-3. Report:
+1. Run `date` to capture the current date/time for logging and timestamps
+2. Run `git status` to check current state
+3. Run `git fetch --prune` to see if remote has changes (prune removes stale tracking branches)
+4. Report:
    - Current branch
    - Uncommitted local changes (if any)
    - Remote changes waiting to be pulled (if any)
