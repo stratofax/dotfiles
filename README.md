@@ -216,3 +216,61 @@ This dotfiles repository supports multiple shells with cross-platform compatibil
 - **Linux**: Standard Linux paths, BOOKMARKS environment variable
 - Automatic platform detection ensures proper PATH and tool configurations
 
+### Machine-Specific Configuration
+
+This repository uses **conditional logic** instead of separate branches for machine-specific settings. This keeps all configuration in a single `main` branch.
+
+**How it works:**
+- Platform detection: `case "$(uname -s)"` for macOS vs Linux
+- Hostname detection: `case "$(hostname)"` for machine-specific settings
+
+**Current machine-specific settings:**
+
+| Machine | Hostname | Custom Settings |
+|---------|----------|-----------------|
+| Baby Dell (Linux Mint) | `baby-dell` | Smaller gvim font (11pt vs 14pt) |
+| Messier4 (Mac) | `Messier4.local` | iTerm2 integration, pyenv, custom Homebrew cask path |
+
+**Adding a new machine:**
+
+1. Identify your hostname: `hostname`
+2. Add a case block in the appropriate platform section:
+
+```bash
+# In zsh/.zshrc (inside the Linux or Darwin case block):
+case "$(hostname)" in
+  your-hostname)
+    # Machine-specific settings here
+    ;;
+esac
+```
+
+3. For vim/gvim, edit `vim/.gvimrc`:
+```vim
+if hostname() =~ 'your-hostname'
+  " Machine-specific settings
+endif
+```
+
+**Updating existing machines:**
+
+When configuration changes are made, update other machines by pulling and restowing:
+
+```bash
+cd ~/dotfiles
+git pull origin main
+stow --restow bash git vim zsh tmux fzf
+```
+
+**Git commit signing:**
+
+All machines use SSH signing with the key at `~/.ssh/id_ed25519`. Ensure this key exists on each machine:
+
+```bash
+# Check for existing key
+ls ~/.ssh/id_ed25519
+
+# Generate if needed
+ssh-keygen -t ed25519 -C "your-email@example.com"
+```
+
