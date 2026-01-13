@@ -1,0 +1,43 @@
+# Git Sync Date Command and Conventions Setup - 2026-01-12
+
+## Session Summary
+
+Added explicit runtime date checking to the git-sync command and established global Git Commit Conventions using Conventional Commits format.
+
+## Work Completed
+
+### Git-Sync Enhancement
+- Added `date` command as step 1 in Phase 1 Pre-flight Check
+- Ensures current timestamp is captured at runtime rather than assumed
+- Fixed numbering in the phase steps after insertion
+
+### Global Git Commit Conventions
+- Created `~/.claude/CLAUDE.md` with Conventional Commits format
+- Defined commit types: feat, fix, docs, style, refactor, test, chore
+- Added message format templates and examples
+
+### Stow Configuration
+- Moved `~/.claude/CLAUDE.md` to `~/dotfiles/claude/.claude/CLAUDE.md`
+- Created symlink via stow for cross-machine portability
+
+## Commits Made
+
+1. `c00b65d` - feat: add date check to git-sync and new claude commands
+   - Added date command to git-sync Phase 1
+   - Added chat-export.md and rn.md commands
+
+2. `5578d97` - feat: add global CLAUDE.md with git commit conventions
+   - Establishes Conventional Commits as default format
+
+## Key Files
+
+- `claude/.claude/commands/git-sync.md` - Modified to add date command
+- `claude/.claude/CLAUDE.md` - New global conventions file
+- `claude/.claude/commands/chat-export.md` - New command (unrelated to main work)
+- `claude/.claude/commands/rn.md` - New command (unrelated to main work)
+
+## Notes
+
+- The git-sync skill now explicitly runs `date` to ensure accurate timestamps
+- Conventional Commits format chosen for consistency across repositories
+- Global CLAUDE.md is now managed via stow for easy deployment to other machines
