@@ -88,3 +88,7 @@ if [ -f "/opt/homebrew/Caskroom/miniconda/base/bin/conda" ]; then
     unset __conda_setup
 fi
 # <<< conda initialize <<<
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/neil/.lmstudio/bin"
+# End of LM Studio CLI section
+

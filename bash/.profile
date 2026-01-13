@@ -77,3 +77,7 @@ esac
 if command -v thefuck >/dev/null 2>&1; then
   eval "$(thefuck --alias)"
 fi
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/neil/.lmstudio/bin"
+# End of LM Studio CLI section
+
