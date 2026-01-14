@@ -15,6 +15,25 @@ This repository provides a cross-platform solution for sharing configuration fil
 - `git/` - Git version control configuration files
 - `fzf/` - Fuzzy finder configuration files
 - `omf/` - Oh My Fish framework configuration files
+- `claude/` - Claude Code shared configurations (commands, skills, agents)
+
+### Claude Code Directories (Important Distinction)
+
+This repository contains two `.claude` directories with different purposes:
+
+1. **`.claude/`** (at repo root: `dotfiles/.claude/`)
+   - Project-specific Claude Code settings for working in this dotfiles repository
+   - Contains `settings.local.json` with permissions specific to dotfiles development
+   - **Never symlinked** - used only when working in this repo
+   - Similar to how any project has its own `.claude/` directory
+
+2. **`claude/.claude/`** (stow package: `dotfiles/claude/.claude/`)
+   - Shared Claude Code configurations to be symlinked to `~/.claude/`
+   - Contains custom commands, skills, agents, and a shared `CLAUDE.md`
+   - **Stow this package** with `stow claude` to symlink contents to `~/.claude/`
+   - Provides consistent Claude Code setup across all computers
+
+**Do not confuse these two directories.** The root `.claude/` is for this repo only; `claude/.claude/` is the stow package for global Claude settings.
 
 ## Installation and Setup
 
@@ -23,9 +42,9 @@ The dotfiles use GNU `stow` for symlink management:
 ```bash
 cd ~/dotfiles
 # Always test with simulation first to avoid issues
-stow --simulate --verbose bash git vim zsh tmux fzf
+stow --simulate --verbose bash git vim zsh tmux fzf claude
 # If simulation looks correct, then run individual packages:
-stow bash git vim zsh tmux fzf
+stow bash git vim zsh tmux fzf claude
 # For .config structure (be cautious of directory symlinks):
 stow .config
 ```
@@ -49,6 +68,7 @@ stow .config
 
 **Recommended stow commands:**
 - `stow bash git vim zsh tmux fzf` - Install home directory configs
+- `stow claude` - Install shared Claude Code commands/skills/agents to ~/.claude/
 - `stow .config` - Install ~/.config/ structure (watch for directory symlinks)
 - **AVOID**: `stow .` - Creates package directory symlinks in home directory
 
@@ -135,6 +155,7 @@ Since this is a dotfiles repository, there are no build, test, or lint commands.
 ### Stow Operations
 - `stow --simulate --verbose <package>` - Test individual package operations safely before applying
 - `stow bash git vim zsh tmux fzf` - Install/update home directory dotfile symlinks
+- `stow claude` - Install/update shared Claude Code configurations to ~/.claude/
 - `stow .config` - Install/update ~/.config/ structure (watch for unwanted directory symlinks)
 
 ### Git Operations
