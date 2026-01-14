@@ -4,7 +4,7 @@ description: Export chat summary to configured output directory
 
 ## Chat Export Command
 
-Export a summary of the current chat session to the repository's chat log directory.
+Export the current chat session to the repository's chat log directory—either as a structured summary or the full conversation.
 
 **Usage**: `/chat-export [topic]`
 
@@ -14,20 +14,28 @@ Export a summary of the current chat session to the repository's chat log direct
 
 **Output directory**: Check the repository's CLAUDE.md for a "Default Paths" table with a "Chat logs" entry. If not found, default to `devlog/`.
 
-**Filename format**: `YYYY-MM-DD-topic-description.txt`
+**Filename format**:
+- Summary: `YYYY-MM-DD-topic-description.md`
+- Full chat: `YYYY-MM-DD-topic-description.txt`
 
 ---
 
 ### Process
 
-#### Step 1: Resolve Output Directory
+#### Step 1: Ask Export Type
+
+Ask the user which export type they want:
+- **Summary** - A structured markdown summary of what was accomplished
+- **Full chat** - The complete conversation transcript
+
+#### Step 2: Resolve Output Directory
 
 1. Check for `CLAUDE.md` in the repository root
 2. Look for a "Default Paths" table with a "Chat logs" entry
 3. If found, use that path as `{output_dir}`
 4. If not found, use `devlog/` as the default
 
-#### Step 2: Get Current Date
+#### Step 3: Get Current Date
 
 Use bash to get today's date:
 
@@ -35,7 +43,7 @@ Use bash to get today's date:
 date +%Y-%m-%d
 ```
 
-#### Step 3: Determine Topic
+#### Step 4: Determine Topic
 
 If topic provided as argument, use it. Otherwise:
 
@@ -49,17 +57,29 @@ If topic provided as argument, use it. Otherwise:
 - Be specific but concise
 - Examples: `complete-json-task-migration`, `review-ochs-proposal`, `debug-api-errors`
 
-#### Step 4: Check for Existing File
+#### Step 5: Check for Existing File
 
 ```bash
-ls {output_dir}/YYYY-MM-DD-*.txt
+ls {output_dir}/YYYY-MM-DD-*.*
 ```
 
 If a file with the same date and similar topic exists, either:
 - Append a number suffix (e.g., `-2`)
 - Ask user if they want to overwrite or rename
 
-#### Step 5: Generate Summary Content
+#### Step 6: Export (Branching)
+
+**If Full Chat:**
+
+1. Create the output directory if it doesn't exist
+2. Generate the export command for the user to run:
+   ```
+   /export {output_dir}/YYYY-MM-DD-topic-description.txt
+   ```
+3. Present the command to the user and instruct them to run it
+4. Skip to Step 7 (confirmation will come from the /export command itself)
+
+**If Summary:**
 
 Create a structured summary document:
 
@@ -93,18 +113,19 @@ Create a structured summary document:
 [Any additional context, next steps, or observations]
 ```
 
-#### Step 6: Write File
-
-Write to: `{output_dir}/YYYY-MM-DD-topic-description.txt`
+Write to: `{output_dir}/YYYY-MM-DD-topic-description.md`
 
 Create the output directory if it doesn't exist.
 
 #### Step 7: Confirm
 
-Report:
+**For Summary:**
 ```
-Chat exported to: {output_dir}/YYYY-MM-DD-topic-description.txt
+Chat exported to: {output_dir}/YYYY-MM-DD-topic-description.md
 ```
+
+**For Full Chat:**
+The `/export` command will confirm when the user runs it.
 
 ---
 
@@ -112,10 +133,13 @@ Chat exported to: {output_dir}/YYYY-MM-DD-topic-description.txt
 
 ```
 /chat-export
-# Auto-detects topic, creates {output_dir}/2026-01-05-review-client-tasks.txt
+# Asks: "Summary or full chat?"
+# If summary: creates {output_dir}/2026-01-05-review-client-tasks.md
+# If full chat: outputs "/export {output_dir}/2026-01-05-review-client-tasks.txt" for user to run
 
 /chat-export debug-login-flow
-# Creates {output_dir}/2026-01-05-debug-login-flow.txt
+# Asks: "Summary or full chat?"
+# Then creates file or generates command with provided topic
 
 /chat-export
 # If topic unclear, asks: "What topic should I use for this export?"
@@ -135,10 +159,14 @@ Where `{output_dir}` is resolved from CLAUDE.md's "Default Paths" table or defau
 
 ### Design Notes
 
-This command creates a human-readable summary, not a raw transcript. Focus on:
+This command offers two export modes:
+
+**Summary mode** creates a human-readable summary focusing on:
 - What was accomplished
 - Decisions made
 - Files changed
 - Next steps
 
 The summary should be useful for future reference without requiring the full conversation context.
+
+**Full chat mode** generates the `/export` command with the resolved path for the user to run. The value is in determining the output directory, date, and topic—the user then runs the command to complete the export.
