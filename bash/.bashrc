@@ -137,7 +137,9 @@ fi
 
 
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/neil/.lmstudio/bin"
-# End of LM Studio CLI section
+# LM Studio CLI (lms)
+[ -d "$HOME/.lmstudio/bin" ] && export PATH="$PATH:$HOME/.lmstudio/bin"
+
+# opencode
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 
