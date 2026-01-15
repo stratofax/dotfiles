@@ -124,8 +124,10 @@ Create the output directory if it doesn't exist.
 Chat exported to: {output_dir}/YYYY-MM-DD-topic-description.md
 ```
 
+Then ask the user if they want to run `/git-sync` to commit and push the exported summary.
+
 **For Full Chat:**
-The `/export` command will confirm when the user runs it.
+The `/export` command will confirm when the user runs it. Remind the user that they can run `/git-sync` afterward to commit and push the export.
 
 ---
 
@@ -135,11 +137,14 @@ The `/export` command will confirm when the user runs it.
 /chat-export
 # Asks: "Summary or full chat?"
 # If summary: creates {output_dir}/2026-01-05-review-client-tasks.md
+#             then asks: "Run /git-sync to commit and push?"
 # If full chat: outputs "/export {output_dir}/2026-01-05-review-client-tasks.txt" for user to run
+#               and reminds: "Run /git-sync afterward to commit and push"
 
 /chat-export debug-login-flow
 # Asks: "Summary or full chat?"
 # Then creates file or generates command with provided topic
+# (Summary also offers /git-sync afterward)
 
 /chat-export
 # If topic unclear, asks: "What topic should I use for this export?"
@@ -167,6 +172,6 @@ This command offers two export modes:
 - Files changed
 - Next steps
 
-The summary should be useful for future reference without requiring the full conversation context.
+The summary should be useful for future reference without requiring the full conversation context. After writing the summary, offer to run `/git-sync` to commit and push the changes—this streamlines the workflow of documenting and saving work.
 
-**Full chat mode** generates the `/export` command with the resolved path for the user to run. The value is in determining the output directory, date, and topic—the user then runs the command to complete the export.
+**Full chat mode** generates the `/export` command with the resolved path for the user to run. The value is in determining the output directory, date, and topic—the user then runs the command to complete the export. A reminder is shown to run `/git-sync` afterward since the export hasn't happened yet at the time of the reminder.
