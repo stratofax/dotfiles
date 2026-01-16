@@ -131,7 +131,17 @@ Wait for user approval before proceeding to Phase 5.
 **Only proceed after user approval in interactive mode.**
 
 1. Stage appropriate files (`git add`)
-2. Create commit(s) with approved messages
+2. Create commit(s) with approved messages using **multiple `-m` flags** (not heredocs):
+   ```bash
+   git commit -m "feat: main message" \
+     -m "- Detail line 1" \
+     -m "- Detail line 2" \
+     -m "" \
+     -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" \
+     -m "" \
+     -m "Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+   ```
+   **Why multiple `-m` flags:** Heredocs (`<<EOF`) require temp file creation, which fails in sandboxed environments. Multiple `-m` flags work universally.
 3. Run `git pull --rebase` (now that working tree is clean)
    - If conflicts occur, handle per Phase 2 conflict rules
 4. Run `git push`
