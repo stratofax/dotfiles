@@ -57,7 +57,8 @@ case "$(uname -s)" in
     # enable fzf keybindings and completion for Zsh:
     [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
     [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
-    [ -f /home/neil/.claude/local/claude ] && alias claude="/home/neil/.claude/local/claude"
+ 
+#    [ -f "$HOME/.claude/local/claude" ] && alias claude="$HOME/.claude/local/claude"
 
     case "$(hostname)" in
       baby-dell)
@@ -95,6 +96,6 @@ if [ -f "/opt/homebrew/Caskroom/miniconda/base/bin/conda" ]; then
 fi
 # <<< conda initialize <<<
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/neil/.lmstudio/bin"
+export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
