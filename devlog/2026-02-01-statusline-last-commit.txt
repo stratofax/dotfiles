@@ -1,0 +1,191 @@
+
+ ▐▛███▜▌   Claude Code v2.1.29
+▝▜█████▛▘  Opus 4.5 · Claude Max
+  ▘▘ ▝▝    ~/dotfiles
+
+❯ /git-sync 
+
+● I'll start by checking the current git status and fetching from remote.
+
+● Bash(date)
+  ⎿  Sun Feb  1 09:05:21 AM EST 2026
+
+● Bash(git status)
+  ⎿  On branch main
+     Your branch is up to date with 'origin/main'.
+
+     nothing to commit, working tree clean
+
+● Bash(git fetch --prune)
+  ⎿  (No content)
+
+● Phase 1: Pre-flight Check
+
+  Current Status:
+  - Branch: main
+  - Uncommitted local changes: None
+  - Remote changes: None (up to date with origin/main)
+
+  The working tree is clean and there are no remote changes to pull.
+
+  ---
+  Git Sync Complete
+  -----------------
+  - Pulled: 0 commits from remote
+  - Committed: 0 files in 0 commit(s)
+  - Pushed: 0 commit(s) to remote
+
+  Nothing to sync - working tree is clean and up to date with remote.
+
+❯ Let's update @claude/.claude/statusline-command.sh so the status line     
+  also displays the time since the last commit                              
+  ⎿  Read claude/.claude/statusline-command.sh (38 lines)
+  ⎿  Loaded claude/.claude/CLAUDE.md
+
+● I'll update the statusline script to show time since the last commit.
+
+● Read 1 file (ctrl+o to expand)
+
+● Update(claude/.claude/statusline-command.sh)
+  ⎿  Added 21 lines
+      17  # Add git branch if available
+      18  if [ -n "$git_branch" ]; then
+      19    printf ' \033[36m(%s)\033[0m' "$git_branch"
+      20 +                                                               
+      21 +  # Add time since last commit                                 
+      22 +  last_commit_ts=$(cd "$cwd" && git log -1 --format=%ct 2>/dev/
+         +null)                                                          
+      23 +  if [ -n "$last_commit_ts" ]; then                            
+      24 +    now=$(date +%s)                                            
+      25 +    diff=$((now - last_commit_ts))                             
+      26 +                                                               
+      27 +    if [ $diff -lt 60 ]; then                                  
+      28 +      time_ago="${diff}s ago"                                  
+      29 +    elif [ $diff -lt 3600 ]; then                              
+      30 +      time_ago="$((diff / 60))m ago"                           
+      31 +    elif [ $diff -lt 86400 ]; then                             
+      32 +      time_ago="$((diff / 3600))h ago"                         
+      33 +    elif [ $diff -lt 604800 ]; then                            
+      34 +      time_ago="$((diff / 86400))d ago"                        
+      35 +    else                                                       
+      36 +      time_ago="$((diff / 604800))w ago"                       
+      37 +    fi                                                         
+      38 +                                                               
+      39 +    printf ' \033[32m[%s]\033[0m' "$time_ago"                  
+      40 +  fi                                                           
+      41  fi
+      42  
+      43  # Add context usage information
+
+● Let me test the script to make sure it works.
+
+● Bash(echo '{"workspace":{"current_dir":"/home/neil/dotfiles"},"context_window"
+      :{"context_window_size":200000,"current_usage":{"input_tokens":1000,"cache
+      _creation_inp…)
+  ⎿ neil@Zorin5 in /home/neil/dotfiles (main) [9h ago] [1,700/200,000 token
+    s, 0% ctx]
+
+
+● The script now displays the time since the last commit in green. The output
+  shows:
+  - neil@Zorin5 (cyan) - user@host
+  - /home/neil/dotfiles (yellow) - current directory
+  - (main) (cyan) - git branch
+  - [9h ago] (green) - new! time since last commit
+  - [1,700/200,000 tokens, 0% ctx] (magenta) - context usage
+
+  Now let me sync this change. Running git status first.
+
+● Bash(git status)
+  ⎿  On branch main
+     Your branch is up to date with 'origin/main'.
+     … +6 lines (ctrl+o to expand)
+
+● Bash(git diff)
+  ⎿ diff --git a/claude/.claude/statusline-command.sh b/claude/.claude/stat
+    usline-command.sh
+    index 95a3075..9148c44 100755
+    … +31 lines (ctrl+o to expand)
+
+
+● Phase 3 & 4: Changes and Commit Message
+
+  Changed files:
+  - claude/.claude/statusline-command.sh (modified) - Added time since last
+  commit display
+
+  Proposed commit message:
+  feat: add time since last commit to statusline
+
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+  Options:
+  1. Approve and commit
+  2. Edit message (provide new message)
+  3. Cancel
+
+✻ Brewed for 34s
+
+❯ 1 
+
+● Bash(git add claude/.claude/statusline-command.sh)
+  ⎿  (No content)
+
+● Bash(git commit -m "feat: add time since last commit to statusline" -m "" -m
+      "🤖 Generated with [Claude Code](https://claude.com/claude-code)" -m "" -m
+       "Co-Authored-…)
+  ⎿  [main f91d91c] feat: add time since last commit to statusline
+      1 file changed, 21 insertions(+)
+
+● Bash(git pull --rebase && git push)
+  ⎿  Current branch main is up to date.
+     remote: Bypassed rule violations for refs/heads/main:
+     remote:
+     … +4 lines (ctrl+o to expand)
+
+● Git Sync Complete
+  -----------------
+  - Pulled: 0 commits from remote
+  - Committed: 1 file in 1 commit
+  - Pushed: 1 commit to remote
+
+  The statusline now shows time since last commit in human-readable format
+  (e.g., [5m ago], [2h ago], [3d ago]).
+
+❯ Do we need to stow since the file we changed is already symlinked? 
+
+● No, you don't need to re-stow. Since the file is already symlinked, any
+  changes to the source file in the repo are immediately available - that's the
+  benefit of symlinks.
+
+  Let me verify it's linked:
+
+● Read 1 file (ctrl+o to expand)
+
+● Confirmed - it's a symlink pointing to the repo file. The change is already
+  live. You only need to re-stow when:
+  - Adding new files to a package
+  - Removing files from a package
+  - Initially setting up symlinks on a new machine
+
+❯ /chat-export 
+
+● Would you like to export this chat as:
+
+  1. Summary - A structured markdown summary of what was accomplished
+  2. Full chat - The complete conversation transcript
+
+❯ 2 
+
+● Bash(date +%Y-%m-%d)
+  ⎿  2026-02-01
+
+● Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● Run this command to export the full chat:
+
+  /export devlog/2026-02-01-statusline-last-commit.txt
+
+  After the export completes, you can run /git-sync to commit and push it.
