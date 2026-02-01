@@ -17,6 +17,27 @@ printf '\033[38;5;39m%s@%s\033[0m in \033[33m%s\033[0m' "$user" "$host" "$cwd"
 # Add git branch if available
 if [ -n "$git_branch" ]; then
   printf ' \033[36m(%s)\033[0m' "$git_branch"
+
+  # Add time since last commit
+  last_commit_ts=$(cd "$cwd" && git log -1 --format=%ct 2>/dev/null)
+  if [ -n "$last_commit_ts" ]; then
+    now=$(date +%s)
+    diff=$((now - last_commit_ts))
+
+    if [ $diff -lt 60 ]; then
+      time_ago="${diff}s ago"
+    elif [ $diff -lt 3600 ]; then
+      time_ago="$((diff / 60))m ago"
+    elif [ $diff -lt 86400 ]; then
+      time_ago="$((diff / 3600))h ago"
+    elif [ $diff -lt 604800 ]; then
+      time_ago="$((diff / 86400))d ago"
+    else
+      time_ago="$((diff / 604800))w ago"
+    fi
+
+    printf ' \033[32m[%s]\033[0m' "$time_ago"
+  fi
 fi
 
 # Add context usage information
