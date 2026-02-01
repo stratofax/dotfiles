@@ -11,8 +11,12 @@ This command performs a complete git synchronization with intelligent commit mes
 ### Mode Detection
 
 Determine the execution mode:
-- **Interactive**: User triggered this command directly
-- **Unattended**: Running as part of automation (check for `--unattended` flag or environment)
+- **Interactive** (default): User confirms commit messages before proceeding
+- **Auto mode** (`--auto` flag): Non-interactive, single commit, no confirmations
+
+```
+--auto    Run in non-interactive mode (no prompts, no confirmations)
+```
 
 ---
 
@@ -36,13 +40,10 @@ If working tree is clean:
 1. Run `git pull --rebase`
 2. **If conflict occurs**:
    - **Interactive**: Show conflict details, ask user how to proceed
-   - **Unattended**: Stop immediately, log the conflict, generate alert message:
+   - **Auto mode**: Stop immediately, exit with error code 1, print:
      ```
-     [Git Sync Alert] Conflict detected in {repo} at {timestamp}
-     Files with conflicts: {list}
-     Manual intervention required.
+     [git-sync] Conflict detected. Manual intervention required.
      ```
-     (Future: send via email/Telegram)
    - Do NOT proceed to commit phase
 
 **Note:** After committing local changes (Phase 5), attempt pull again before push to ensure we're up to date with remote.
@@ -82,7 +83,7 @@ If there are uncommitted changes:
    > 2. Group into logical commits (diary, tasks, pages, etc.)
    > 3. Review each file and decide"
 
-5. **Unattended mode**: Commit all together with a descriptive message
+5. **Auto mode**: Skip prompts, always group all changes into a single commit
 
 ---
 
@@ -122,13 +123,13 @@ After generating the commit message, present it to the user:
 
 Wait for user approval before proceeding to Phase 5.
 
-**Unattended mode**: Skip review, commit directly with generated message.
+**Auto mode**: Skip review, commit directly with generated message.
 
 ---
 
 ### Phase 5: Commit and Push
 
-**Only proceed after user approval in interactive mode.**
+**Only proceed after user approval in interactive mode. Auto mode proceeds without confirmation.**
 
 1. Stage appropriate files (`git add`)
 2. Create commit(s) with approved messages using **multiple `-m` flags** (not heredocs):
@@ -181,11 +182,17 @@ If user provides feedback, save it to the repository's notes directory (check "D
 - **Conflicts**: Never auto-resolve; always stop and alert
 - **Empty commits**: Skip commit phase, report "nothing to commit"
 
+**Exit codes (for scripting with `--auto`):**
+
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | Failure (conflict, push error, network error) |
+
 ---
 
 ### Future Enhancements (tracked in roadmap)
 
-- `--unattended` flag for cron execution
-- Alert routing (email, Telegram) on conflicts or failures
+- Alert routing (email, Telegram) on conflicts or failures in `--auto` mode
 - Integration with `/process-tasks` for post-workflow commits
 - Separate `/git-pull`, `/git-commit`, `/git-push` commands if needed
