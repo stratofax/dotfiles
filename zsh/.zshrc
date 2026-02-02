@@ -95,6 +95,7 @@ if [ -f "/opt/homebrew/Caskroom/miniconda/base/bin/conda" ]; then
     unset __conda_setup
 fi
 # <<< conda initialize <<<
+# dotfiles-managed: lmstudio
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section

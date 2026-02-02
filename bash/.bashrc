@@ -137,6 +137,7 @@ fi
 
 
 
+# dotfiles-managed: lmstudio
 # LM Studio CLI (lms)
 [ -d "$HOME/.lmstudio/bin" ] && export PATH="$PATH:$HOME/.lmstudio/bin"
 
