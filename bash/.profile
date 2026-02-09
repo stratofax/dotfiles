@@ -60,6 +60,11 @@ fi
 echo "$PATH" | grep -Eq "(^|:)$HOME/.local/bin(:|$)" || export PATH="$PATH:$HOME/.local/bin"
 echo "$PATH" | grep -Eq "(^|:)$HOME/bin(:|$)" || export PATH="$PATH:$HOME/bin"
 
+# Go binaries
+if [ -d "$HOME/go/bin" ]; then
+  echo "$PATH" | grep -Eq "(^|:)$HOME/go/bin(:|$)" || export PATH="$PATH:$HOME/go/bin"
+fi
+
 # Platform-specific configurations
 case "$(uname -s)" in
   Darwin)
