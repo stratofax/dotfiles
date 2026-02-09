@@ -15,8 +15,14 @@ Determine the execution mode:
 - **Auto mode** (`--auto` flag): Non-interactive, single commit, no confirmations
 
 ```
---auto    Run in non-interactive mode (no prompts, no confirmations)
+--auto       Run in non-interactive mode (no prompts, no confirmations)
+--no-scan    Skip the pre-commit secret scan
 ```
+
+**Secret scan behavior:**
+- **Interactive** (default): Runs a quick secret scan on changed files before committing
+- **`--auto`**: Skips the scan (cannot prompt for remediation)
+- **`--no-scan`**: Explicitly skips the scan
 
 ---
 
@@ -25,10 +31,17 @@ Determine the execution mode:
 1. Run `date` to capture the current date/time for logging and timestamps
 2. Run `git status` to check current state
 3. Run `git fetch --prune` to see if remote has changes (prune removes stale tracking branches)
-4. Report:
+4. **Check for incoming changes**: Run `git log HEAD..origin/main --oneline --stat`
+   to see what commits exist on remote that haven't been merged locally.
+   - If incoming commits exist, report the commit count and which files they touch
+   - If any incoming files overlap with locally modified files, warn about
+     potential conflicts before proceeding
+5. Report:
    - Current branch
    - Uncommitted local changes (if any)
    - Remote changes waiting to be pulled (if any)
+   - Incoming commits and affected files (if any)
+   - Conflict risk warning (if local and remote changes overlap)
 
 ---
 
@@ -84,6 +97,61 @@ If there are uncommitted changes:
    > 3. Review each file and decide"
 
 5. **Auto mode**: Skip prompts, always group all changes into a single commit
+
+---
+
+### Phase 3.5: Quick Secret Scan
+
+**Skip this phase if `--auto` or `--no-scan` is set.**
+
+Scan only the changed files (from `git status --porcelain` in Phase 3) for
+secrets before they enter git history. This is a lightweight check — not a
+full repo scan.
+
+1. **Extract changed file paths** from the porcelain output (both staged and
+   unstaged).
+
+2. **Run known-prefix pattern checks** against only those files. Use Grep
+   scoped to each changed file for these patterns:
+
+   | Pattern | Service |
+   |---------|---------|
+   | `sk-ant-api` | Anthropic API key |
+   | `sk-ant-oat` | Anthropic OAuth token |
+   | `sk-ant-ort` | Anthropic OAuth refresh token |
+   | `sk-[a-zA-Z0-9]{20,}` | OpenAI API key |
+   | `ghp_[a-zA-Z0-9]{36}` | GitHub personal access token |
+   | `AKIA[A-Z0-9]{16}` | AWS access key ID |
+   | `-----BEGIN .* PRIVATE KEY-----` | Private keys |
+
+3. **Run generic secret pattern checks** against only those files:
+
+   | Pattern | What it catches |
+   |---------|----------------|
+   | `(?i)(api_?key\|apikey\|api_?secret)\s*[:=]\s*["'][^"']{8,}` | API key assignments |
+   | `(?i)(secret\|password\|passwd)\s*[:=]\s*["'][^"']{8,}` | Secret/password assignments |
+
+4. **Filter false positives**: Skip lines containing `...`, `<token>`,
+   `YOUR_`, `xxx`, `example`, `placeholder`, `changeme`, `FIXME`,
+   `[REDACTED]`. Also skip `maxTokens`, `token_count`, `tokenizer` and
+   similar code identifiers.
+
+5. **Report results:**
+
+   - **No findings**: Print `Secret scan: clean` and proceed to Phase 4.
+   - **Findings detected**: Display each finding with file, line, and
+     pattern matched. Then ask:
+
+     > "Secret scan found {n} potential secret(s) in changed files.
+     > Would you like to:
+     > 1. Review and fix before committing
+     > 2. Skip these findings and commit anyway
+     > 3. Cancel git-sync"
+
+     If user chooses option 1, suggest fixes per `/scan-secrets` Phase 5
+     logic, then restart from Phase 3 after changes are made.
+
+     If user chooses option 3, abort the entire git-sync.
 
 ---
 
@@ -196,3 +264,4 @@ If user provides feedback, save it to the repository's notes directory (check "D
 - Alert routing (email, Telegram) on conflicts or failures in `--auto` mode
 - Integration with `/process-tasks` for post-workflow commits
 - Separate `/git-pull`, `/git-commit`, `/git-push` commands if needed
+- Secret scan in `--auto` mode: log warnings instead of blocking
