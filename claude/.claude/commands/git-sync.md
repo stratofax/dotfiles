@@ -47,7 +47,12 @@ Determine the execution mode:
 
 ### Phase 2: Pull with Rebase (if clean)
 
-**Skip this phase if Phase 1 detected uncommitted changes** - `git pull --rebase` requires a clean working tree. Proceed directly to Phase 3 to commit local changes first.
+**If Phase 1 detected uncommitted changes**, skip the pull but **warn if remote commits are pending:**
+
+> **Warning:** {n} remote commit(s) detected. These will be rebased after your commit.
+> Potential conflicts may arise in Phase 5. Proceeding to commit local changes first.
+
+Then proceed directly to Phase 3.
 
 If working tree is clean:
 1. Run `git pull --rebase`
