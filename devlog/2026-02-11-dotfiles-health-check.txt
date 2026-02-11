@@ -1,0 +1,324 @@
+
+           Claude Code v2.1.39
+ ▐▛███▜▌   Opus 4.6 · Claude Max
+▝▜█████▛▘  ~/dotfiles
+  ▘▘ ▝▝    Opus 4.6 is here · $50 free extra usage · /extra-usage to enable
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Plan to implement                                                            │
+│                                                                              │
+│ Dotfiles Health-Check System - Implementation Plan                           │
+│                                                                              │
+│ Context                                                                      │
+│                                                                              │
+│ The dotfiles repo needs a way to validate that all stow packages are         │
+│ correctly symlinked, shell configs pass linting, no hardcoded paths or       │
+│ artifacts exist, and platform portability is maintained. This will be a      │
+│ single Claude command (/dotfiles-health) that spawns parallel Task subagents │
+│  per package.                                                                │
+│                                                                              │
+│ Files to Create/Modify                                                       │
+│                                                                              │
+│ 1. CREATE claude/.claude/commands/dotfiles-health.md - Main command file     │
+│ 2. MODIFY CLAUDE.md - Add architecture documentation section                 │
+│                                                                              │
+│ Stow Packages to Check (8 total)                                             │
+│                                                                              │
+│ bash, zsh, vim, tmux, fzf, git, claude, .config                              │
+│                                                                              │
+│ Excluded from enumeration: devlog, tmp, .git, .claude (project-specific),    │
+│ plus non-directory files.                                                    │
+│                                                                              │
+│ Command Structure (dotfiles-health.md)                                       │
+│                                                                              │
+│ YAML frontmatter + 5 phases following existing command patterns              │
+│ (scan-secrets.md, git-sync.md).                                              │
+│                                                                              │
+│ Arguments: --package <name>, --json-only, --verbose                          │
+│                                                                              │
+│ Phase 1: Parse Arguments & Enumerate Packages                                │
+│                                                                              │
+│ - Parse $ARGUMENTS for flags                                                 │
+│ - List directories in ~/dotfiles/, filter to stow packages                   │
+│ - Capture metadata: timestamp, hostname                                      │
+│                                                                              │
+│ Phase 2: Spawn Per-Package Agents (Parallel)                                 │
+│                                                                              │
+│ For each package, launch a Task agent (subagent_type: general-purpose) that  │
+│ performs 5 checks and returns JSON:                                          │
+│                                                                              │
+│ Check a) Symlinks - verify expected symlinks exist and point correctly:      │
+│ - Standard packages (bash, zsh, vim, tmux, fzf, git): ~/.<file> →            │
+│ dotfiles/<pkg>/<file>                                                        │
+│ - claude: ~/.claude/<item> → ../dotfiles/claude/.claude/<item>               │
+│ - .config: ~/.config/<subdir> → ../dotfiles/.config/<subdir>                 │
+│                                                                              │
+│ Check b) Hardcoded paths - grep for /home/neil or /Users/neil:               │
+│ - Skip .md documentation files and git config                                │
+│ - Mark as "warn" if inside correct platform-conditional block                │
+│ - Mark as "fail" if outside any guard                                        │
+│                                                                              │
+│ Check c) ShellCheck - run on shell files:                                    │
+│ - bash: .bashrc, .bash_aliases, .bash_prompt, .profile                       │
+│ - zsh: .zshrc (with --shell=bash approximation)                              │
+│ - fzf: .fzf.bash, .fzf.zsh                                                   │
+│ - claude: statusline-command.sh, hooks/lint-bash.sh                          │
+│ - Skip fish (unsupported), vim/git/tmux configs (not shell)                  │
+│                                                                              │
+│ Check d) Platform portability - detect one-sided platform checks:            │
+│ - uname -s case blocks with only Darwin or only Linux                        │
+│ - $OSTYPE checks without both platforms                                      │
+│ - Unguarded platform-specific paths                                          │
+│                                                                              │
+│ Check e) Artifacts - glob for files that don't belong:                       │
+│ - *.bak, *.swp, *.swo, *~, .DS_Store, __pycache__/, *.pyc, .env,             │
+│ node_modules/, *.log, .directory                                             │
+│                                                                              │
+│ Each agent returns structured JSON per the schema below.                     │
+│                                                                              │
+│ Phase 3: Aggregate Results                                                   │
+│                                                                              │
+│ - Collect all agent JSON outputs                                             │
+│ - Compute summary: total packages, passed, failed, total issues              │
+│ - Per-package status: pass (all checks pass/skip), warn (any warn, no fail), │
+│  fail (any fail)                                                             │
+│                                                                              │
+│ Phase 4: Output Summary Table                                                │
+│                                                                              │
+│ Package   Symlinks  Paths  ShellCheck  Platform  Artifacts  Status           │
+│ --------  --------  -----  ----------  --------  ---------  ------           │
+│ bash      4/4       OK     1 warn      OK        OK         PASS             │
+│ ...                                                                          │
+│                                                                              │
+│ Phase 5: Write JSON Report                                                   │
+│                                                                              │
+│ - mkdir -p ~/.local/share/dotfiles-health                                    │
+│ - Write report to ~/.local/share/dotfiles-health/report.json                 │
+│ - Report pass/fail summary; indicate exit code 1 if any failures             │
+│                                                                              │
+│ JSON Report Schema                                                           │
+│                                                                              │
+│ {                                                                            │
+│   "version": "1.0",                                                          │
+│   "timestamp": "ISO-8601",                                                   │
+│   "hostname": "...",                                                         │
+│   "dotfiles_path": "/home/neil/dotfiles",                                    │
+│   "summary": {                                                               │
+│     "total_packages": 8,                                                     │
+│     "passed": 0,                                                             │
+│     "failed": 0,                                                             │
+│     "warned": 0,                                                             │
+│     "total_issues": 0                                                        │
+│   },                                                                         │
+│   "packages": {                                                              │
+│     "<name>": {                                                              │
+│       "status": "pass|warn|fail",                                            │
+│       "checks": {                                                            │
+│         "symlinks": { "status": "...", "expected": N, "found": N, "missing": │
+│  [], "broken": [] },                                                         │
+│         "hardcoded_paths": { "status": "...", "findings": [] },              │
+│         "shellcheck": { "status": "...", "files_checked": N, "findings": []  │
+│ },                                                                           │
+│         "platform_portability": { "status": "...", "findings": [] },         │
+│         "artifacts": { "status": "...", "findings": [] }                     │
+│       }                                                                      │
+│     }                                                                        │
+│   }                                                                          │
+│ }                                                                            │
+│                                                                              │
+│ CLAUDE.md Documentation Section                                              │
+│                                                                              │
+│ Add a ## Dotfiles Health-Check System section before ## Troubleshooting      │
+│ Notes documenting:                                                           │
+│ - Architecture (parallel fan-out with Task subagents)                        │
+│ - Table of 5 checks and what they validate                                   │
+│ - Report location                                                            │
+│ - How to add new validation rules (5-step guide)                             │
+│ - Package-specific symlink rules table                                       │
+│                                                                              │
+│ Verification                                                                 │
+│                                                                              │
+│ 1. Run /dotfiles-health in the dotfiles repo                                 │
+│ 2. Confirm all 8 packages are checked                                        │
+│ 3. Verify ~/.local/share/dotfiles-health/report.json is valid JSON with      │
+│ correct schema                                                               │
+│ 4. Confirm summary table renders correctly                                   │
+│ 5. Test --package bash for single-package mode                               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+● I'll start by reading the existing command files to follow their patterns,
+  then implement the plan.
+
+● Let me read the existing command files and directory structure.
+
+● Searched for 2 patterns, read 2 files (ctrl+o to expand)
+  ⎿  Loaded claude/.claude/CLAUDE.md
+
+● Now let me look at the actual stow package contents to understand what files
+  exist in each package.
+
+● Read 2 files (ctrl+o to expand)
+
+● Now let me check the actual files in each stow package to understand what gets
+   symlinked.
+
+● Explore(Enumerate stow package files)
+  ⎿  Done (15 tool uses · 16.6k tokens · 13s)
+
+● Now I have all the info needed. Let me create the command file.
+
+● Write(claude/.claude/commands/dotfiles-health.md)
+  ⎿  Wrote 294 lines to claude/.claude/commands/dotfiles-health.md
+       1 ---
+       2 description: Run a health check on all dotfiles stow packages
+       3 ---
+       4 
+       5 ## Dotfiles Health Check
+       6 
+       7 Validate that all stow packages are correctly symlinked, shell c
+         onfigs pass linting, no hardcoded paths or artifacts exist, and 
+         platform portability is maintained.
+       8 
+       9 **Usage**:
+      10 - Full check: `/dotfiles-health`
+     … +284 lines (ctrl+o to expand)
+
+● Now let me update CLAUDE.md with the health-check documentation section. I
+  need to insert it before the ## Troubleshooting Notes section.
+
+● Update(CLAUDE.md)
+  ⎿  Added 58 lines
+      173  
+      174  When modifying configurations, ensure platform-specific sectio
+           ns are maintained appropriately.
+      175  
+      176 +## Dotfiles Health-Check System                               
+      177 +                                                              
+      178 +The `/dotfiles-health` command validates the integrity of all 
+          +stow packages using a parallel fan-out architecture. It spawns
+          + one Task subagent per package, runs 5 checks in each, aggrega
+          +tes results into a summary table and JSON report.             
+      179 +                                                              
+      180 +### Architecture                                              
+      181 +                                                              
+      182 +```                                                           
+      183 +/dotfiles-health                                              
+      184 +  └─ Phase 1: Parse args, enumerate packages                  
+      185 +  └─ Phase 2: Spawn parallel Task agents (1 per package)      
+      186 +       ├─ bash agent   → 5 checks → JSON                      
+      187 +       ├─ zsh agent    → 5 checks → JSON                      
+      188 +       ├─ vim agent    → 5 checks → JSON                      
+      189 +       ├─ tmux agent   → 5 checks → JSON                      
+      190 +       ├─ fzf agent    → 5 checks → JSON                      
+      191 +       ├─ git agent    → 5 checks → JSON                      
+      192 +       ├─ claude agent → 5 checks → JSON                      
+      193 +       └─ .config agent→ 5 checks → JSON                      
+      194 +  └─ Phase 3: Aggregate results                               
+      195 +  └─ Phase 4: Print summary table                             
+      196 +  └─ Phase 5: Write JSON report                               
+      197 +```                                                           
+      198 +                                                              
+      199 +### Checks                                                    
+      200 +                                                              
+      201 +| Check | What it validates | Statuses |                      
+      202 +|-------|-------------------|----------|                      
+      203 +| Symlinks | Expected symlinks exist and point to correct targ
+          +ets | pass/warn/fail |                                        
+      204 +| Hardcoded paths | No unguarded `/home/neil` or `/Users/neil`
+          + references | pass/warn/fail |                                
+      205 +| ShellCheck | Shell scripts pass linting (severity >= warning
+          +) | pass/warn/fail/skip |                                     
+      206 +| Platform portability | Platform guards handle both Darwin an
+          +d Linux | pass/warn/fail/skip |                               
+      207 +| Artifacts | No stale files (`.bak`, `.swp`, `.DS_Store`, etc
+          +.) | pass/fail |                                              
+      208 +                                                              
+      209 +### Report Location                                           
+      210 +                                                              
+      211 +JSON reports are written to `~/.local/share/dotfiles-health/re
+          +port.json`.                                                   
+      212 +                                                              
+      213 +### Package-Specific Symlink Rules                            
+      214 +                                                              
+      215 +| Package | Symlink targets |                                 
+      216 +|---------|----------------|                                  
+      217 +| bash | `~/.bashrc`, `~/.bash_aliases`, `~/.bash_prompt`, `~/
+          +.profile` |                                                   
+      218 +| zsh | `~/.zshrc` |                                          
+      219 +| vim | `~/.vimrc`, `~/.gvimrc` |                             
+      220 +| tmux | `~/.tmux.conf` |                                     
+      221 +| fzf | `~/.fzf.bash`, `~/.fzf.zsh` |                         
+      222 +| git | `~/.gitconfig`, `~/.gitmodules` |                     
+      223 +| claude | `~/.claude/CLAUDE.md`, `~/.claude/commands`, `~/.cl
+          +aude/agents`, `~/.claude/skills`, `~/.claude/statusline-comman
+          +d.sh`, `~/.claude/hooks` |                                    
+      224 +| .config | `~/.config/nvim`, `~/.config/fish`, `~/.config/omf
+          +` |                                                           
+      225 +                                                              
+      226 +### Adding New Validation Rules                               
+      227 +                                                              
+      228 +1. **Identify the check category** — does your rule fit an exi
+          +sting check (symlinks, paths, shellcheck, platform, artifacts)
+          + or need a new one?                                           
+      229 +2. **Update the command file** (`claude/.claude/commands/dotfi
+          +les-health.md`) — add the new pattern or file to the relevant 
+          +check section in Phase 2.                                     
+      230 +3. **Update the symlink table** if adding a new package or new
+          + files to an existing package.                                
+      231 +4. **Update this documentation** in CLAUDE.md with any new che
+          +ck categories or package rules.                               
+      232 +5. **Test with** `/dotfiles-health --package <name> --verbose`
+          + to verify the new rule works correctly.                      
+      233 +                                                              
+      234  ## Troubleshooting Notes
+      235  
+      236  ### Stow Issues
+
+● Let me verify both files look correct.
+
+● Read 2 files (ctrl+o to expand)
+
+● Both files look good. Here's a summary of what was created:
+
+  Created: claude/.claude/commands/dotfiles-health.md (246 lines)
+  - YAML frontmatter with description
+  - Usage section with --package, --json-only, --verbose flags
+  - 5 phases following the existing command patterns:
+    - Phase 1 — Parse arguments, enumerate 8 stow packages
+    - Phase 2 — Spawn parallel Task agents per package, each running 5 checks
+  (symlinks, hardcoded paths, shellcheck, platform portability, artifacts) with
+  full JSON output schema
+    - Phase 3 — Aggregate results, compute pass/warn/fail per package
+    - Phase 4 — Print formatted summary table
+    - Phase 5 — Write JSON report to ~/.local/share/dotfiles-health/report.json
+  - Error handling section
+
+  Modified: CLAUDE.md — Added ## Dotfiles Health-Check System section before
+  Troubleshooting Notes with:
+  - ASCII architecture diagram showing the parallel fan-out pattern
+  - Table of all 5 checks and their statuses
+  - Report location
+  - Package-specific symlink rules table
+  - 5-step guide for adding new validation rules
+
+✻ Baked for 2m 19s
+
+❯ /chat-export 
+
+● Bash(date +%Y-%m-%d)
+  ⎿  2026-02-11
+
+● Read 1 file (ctrl+o to expand)
+
+● User answered Claude's questions:
+  ⎿  · Which export type would you like? → Full chat
+
+● The topic for this session is the dotfiles health-check implementation.
+  There's already a 2026-02-11-scan-secrets-and-git-sync.md so this will be a
+  separate file.
+
+  Run this command to export the full chat:
+
+  /export devlog/2026-02-11-dotfiles-health-check.txt
+
+  After exporting, you can run /git-sync to commit and push the changes.

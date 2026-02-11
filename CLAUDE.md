@@ -173,6 +173,64 @@ The configuration includes conditional logic for different platforms:
 
 When modifying configurations, ensure platform-specific sections are maintained appropriately.
 
+## Dotfiles Health-Check System
+
+The `/dotfiles-health` command validates the integrity of all stow packages using a parallel fan-out architecture. It spawns one Task subagent per package, runs 5 checks in each, aggregates results into a summary table and JSON report.
+
+### Architecture
+
+```
+/dotfiles-health
+  └─ Phase 1: Parse args, enumerate packages
+  └─ Phase 2: Spawn parallel Task agents (1 per package)
+       ├─ bash agent   → 5 checks → JSON
+       ├─ zsh agent    → 5 checks → JSON
+       ├─ vim agent    → 5 checks → JSON
+       ├─ tmux agent   → 5 checks → JSON
+       ├─ fzf agent    → 5 checks → JSON
+       ├─ git agent    → 5 checks → JSON
+       ├─ claude agent → 5 checks → JSON
+       └─ .config agent→ 5 checks → JSON
+  └─ Phase 3: Aggregate results
+  └─ Phase 4: Print summary table
+  └─ Phase 5: Write JSON report
+```
+
+### Checks
+
+| Check | What it validates | Statuses |
+|-------|-------------------|----------|
+| Symlinks | Expected symlinks exist and point to correct targets | pass/warn/fail |
+| Hardcoded paths | No unguarded `/home/neil` or `/Users/neil` references | pass/warn/fail |
+| ShellCheck | Shell scripts pass linting (severity >= warning) | pass/warn/fail/skip |
+| Platform portability | Platform guards handle both Darwin and Linux | pass/warn/fail/skip |
+| Artifacts | No stale files (`.bak`, `.swp`, `.DS_Store`, etc.) | pass/fail |
+
+### Report Location
+
+JSON reports are written to `~/.local/share/dotfiles-health/report.json`.
+
+### Package-Specific Symlink Rules
+
+| Package | Symlink targets |
+|---------|----------------|
+| bash | `~/.bashrc`, `~/.bash_aliases`, `~/.bash_prompt`, `~/.profile` |
+| zsh | `~/.zshrc` |
+| vim | `~/.vimrc`, `~/.gvimrc` |
+| tmux | `~/.tmux.conf` |
+| fzf | `~/.fzf.bash`, `~/.fzf.zsh` |
+| git | `~/.gitconfig`, `~/.gitmodules` |
+| claude | `~/.claude/CLAUDE.md`, `~/.claude/commands`, `~/.claude/agents`, `~/.claude/skills`, `~/.claude/statusline-command.sh`, `~/.claude/hooks` |
+| .config | `~/.config/nvim`, `~/.config/fish`, `~/.config/omf` |
+
+### Adding New Validation Rules
+
+1. **Identify the check category** — does your rule fit an existing check (symlinks, paths, shellcheck, platform, artifacts) or need a new one?
+2. **Update the command file** (`claude/.claude/commands/dotfiles-health.md`) — add the new pattern or file to the relevant check section in Phase 2.
+3. **Update the symlink table** if adding a new package or new files to an existing package.
+4. **Update this documentation** in CLAUDE.md with any new check categories or package rules.
+5. **Test with** `/dotfiles-health --package <name> --verbose` to verify the new rule works correctly.
+
 ## Troubleshooting Notes
 
 ### Stow Issues
