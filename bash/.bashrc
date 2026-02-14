@@ -143,3 +143,9 @@ fi
 
 # opencode
 [ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
+
+# Source credentials (not in git repo, created per-machine)
+[[ -f ~/.my_tokens ]] && source ~/.my_tokens
+
+# Source shared shell functions
+[[ -f ~/.shell_functions ]] && source ~/.shell_functions
