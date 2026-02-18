@@ -149,3 +149,24 @@ fi
 
 # Source shared shell functions
 [[ -f ~/.shell_functions ]] && source ~/.shell_functions
+
+# Machine-specific settings
+case "$(hostname)" in
+  flicky)
+    # bun
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+    export PATH="$HOME/.local/bin:$PATH"
+
+    # PAI aliases
+    alias pai='bun ~/.claude/skills/PAI/Tools/pai.ts'
+    alias slim='export PAI_STATUSLINE=compact'
+    alias full='export PAI_STATUSLINE=full'
+
+    # ssh-agent
+    if [ -z "$SSH_AUTH_SOCK" ]; then
+      eval $(ssh-agent -s) > /dev/null 2>&1
+      ssh-add ~/.ssh/id_ed25519 2>/dev/null
+    fi
+    ;;
+esac
