@@ -161,8 +161,8 @@ case "$(hostname)" in
     alias slim='export PAI_STATUSLINE=compact'
     alias full='export PAI_STATUSLINE=full'
 
-    # ssh-agent
-    if [ -z "$SSH_AUTH_SOCK" ]; then
+    # ssh-agent (skip if agent running with keys, restart if stale)
+    if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l &>/dev/null; then
       eval $(ssh-agent -s) > /dev/null 2>&1
       ssh-add ~/.ssh/id_ed25519 2>/dev/null
     fi
