@@ -127,11 +127,9 @@ fi
 echo $PATH | grep -Eq "(^|:)/sbin(:|$)"     || PATH=$PATH:/sbin
 echo $PATH | grep -Eq "(^|:)/usr/sbin(:|$)" || PATH=$PATH:/usr/sbin
 
-# set up environment for dev tools, if present
-# Source shared development tools configuration from .profile
-if [ -f ~/.profile ]; then
-  . ~/.profile
-fi
+# Note: .profile is sourced by .bash_profile for login shells.
+# Non-login interactive shells inherit the environment from the login shell,
+# so .profile does not need to be sourced here.
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
