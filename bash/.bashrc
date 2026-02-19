@@ -162,7 +162,21 @@ case "$(hostname)" in
     alias full='export PAI_STATUSLINE=full'
 
     # ssh-agent: reuse existing agent across SSH reconnects
-    # Priority: current agent (tmux inherited) > agent-env file > new agent
+    #
+    # Three-tier priority:
+    #   1. Current SSH_AUTH_SOCK (e.g. inherited by tmux from the session that started it)
+    #   2. Saved agent from ~/.ssh/agent-env (persists socket path across SSH reconnects)
+    #   3. Start a new agent and prompt for passphrase (last resort)
+    #
+    # Why this order matters:
+    #   tmux shells inherit SSH_AUTH_SOCK from the session that launched tmux.
+    #   If we source agent-env FIRST (as we used to), it overwrites that working
+    #   socket with a potentially stale one, causing ssh-add -l to fail and
+    #   triggering an unnecessary passphrase prompt. Checking the current agent
+    #   first avoids this — if it already works, we leave it alone.
+    #
+    # agent-env only stores the socket path and PID, never keys or passphrases.
+    #
     _agent_env="$HOME/.ssh/agent-env"
     if ! ssh-add -l &>/dev/null; then
       # Current agent not working — try saved agent
