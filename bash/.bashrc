@@ -162,11 +162,16 @@ case "$(hostname)" in
     alias full='export PAI_STATUSLINE=full'
 
     # ssh-agent: reuse existing agent across SSH reconnects
+    # Priority: current agent (tmux inherited) > agent-env file > new agent
     _agent_env="$HOME/.ssh/agent-env"
-    if [ -f "$_agent_env" ]; then
-      . "$_agent_env" > /dev/null
+    if ! ssh-add -l &>/dev/null; then
+      # Current agent not working — try saved agent
+      if [ -f "$_agent_env" ]; then
+        . "$_agent_env" > /dev/null
+      fi
     fi
     if ! ssh-add -l &>/dev/null; then
+      # Still no working agent — start fresh
       eval $(ssh-agent -s) > /dev/null 2>&1
       echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK; export SSH_AUTH_SOCK;" > "$_agent_env"
       echo "SSH_AGENT_PID=$SSH_AGENT_PID; export SSH_AGENT_PID;" >> "$_agent_env"
