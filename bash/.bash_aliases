@@ -48,9 +48,6 @@ alias sudo='sudo '
 # Get week number
 alias week='date +%V'
 
-# IP addresses
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
