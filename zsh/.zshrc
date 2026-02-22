@@ -55,6 +55,9 @@ case "$(uname -s)" in
 
       export HOMEBREW_CASK_OPTS="--appdir=/Volumes/990Pro2TB/Apps"
 
+      # Tailscale CLI alias (macOS cask installs CLI inside the app bundle)
+      alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
       ;;
     esac
     ;;
