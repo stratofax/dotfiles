@@ -44,6 +44,9 @@ case "$(uname -s)" in
   Darwin)
     source <(fzf --zsh)
 
+    # Tailscale CLI alias (macOS cask installs CLI inside the app bundle)
+    alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
     case "$(hostname)" in
       Messier4.local)
 
@@ -54,9 +57,6 @@ case "$(uname -s)" in
       eval "$(pyenv init -)"
 
       export HOMEBREW_CASK_OPTS="--appdir=/Volumes/990Pro2TB/Apps"
-
-      # Tailscale CLI alias (macOS cask installs CLI inside the app bundle)
-      alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
       ;;
     esac
