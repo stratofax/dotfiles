@@ -8,7 +8,7 @@ Preserve the latest `/insights` report as a dated snapshot and maintain a browsa
 
 **Prerequisites:**
 
-- `~/.claude/usage-data/` directory exists (served by `claude-insights.service` on port 8080)
+- `~/.claude/usage-data/` directory exists (served by `claude-insights.service` on port 8090)
 - User has run `/insights` to generate `report.html`
 
 ---
@@ -115,7 +115,7 @@ Report: ~/.claude/usage-data/report.html verified (modified today)
 Published: {date}-report.html
 Index: Updated with {count} reports
 
-Browse: http://192.168.52.21:8080/
+Browse: http://192.168.52.21:8090/
 ```
 
 ---
