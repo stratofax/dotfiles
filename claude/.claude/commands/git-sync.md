@@ -17,6 +17,8 @@ Determine the execution mode:
 ```
 --auto       Run in non-interactive mode (no prompts, no confirmations)
 --no-scan    Skip the pre-commit secret scan
+--pr         Create a new feature branch and open a pull request
+--pr <name>  Same, but use <name> as the branch name (e.g., --pr post/magical-thinking)
 ```
 
 **Secret scan behavior:**
@@ -205,7 +207,16 @@ Wait for user approval before proceeding to Phase 5.
 **Only proceed after user approval in interactive mode. Auto mode proceeds without confirmation.**
 
 1. Stage appropriate files (`git add`)
-2. Create commit(s) with approved messages using **multiple `-m` flags** (not heredocs):
+2. **If `--pr` flag is set**, create a feature branch before committing:
+   - If the user provided a branch name (`--pr <name>`), use it directly.
+   - Otherwise, auto-derive from the commit message: take the conventional commit
+     type and a kebab-case slug of the subject.
+     Example: commit message `feat: Add Magical Thinking blog post` becomes
+     branch `post/magical-thinking` (use `post/` prefix for `feat:` commits that
+     add blog content; otherwise use the commit type, e.g. `fix/`, `chore/`).
+   - Run `git checkout -b <branch-name>`
+   - If the branch already exists, warn and ask the user to provide a different name.
+3. Create commit(s) with approved messages using **multiple `-m` flags** (not heredocs):
    ```bash
    git commit -m "feat: main message" \
      -m "- Detail line 1" \
@@ -216,10 +227,27 @@ Wait for user approval before proceeding to Phase 5.
      -m "Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
    ```
    **Why multiple `-m` flags:** Heredocs (`<<EOF`) require temp file creation, which fails in sandboxed environments. Multiple `-m` flags work universally.
-3. Run `git pull --rebase` (now that working tree is clean)
+4. Run `git pull --rebase` (now that working tree is clean)
    - If conflicts occur, handle per Phase 2 conflict rules
-4. Run `git push`
-5. Report success or failure
+   - **If `--pr`**: skip this step (new branch has no upstream yet)
+5. **If `--pr`**: Push with tracking and create PR:
+   ```bash
+   git push -u origin <branch-name>
+   gh pr create --title "<commit subject>" --body "<PR body>"
+   ```
+   The PR body should follow this format:
+   ```
+   ## Summary
+   <bullet points summarizing the changes>
+
+   ## Test plan
+   - [ ] Verify staging preview renders correctly
+   - [ ] Review content and formatting
+
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+   ```
+   **If not `--pr`**: Run `git push`
+6. Report success or failure. If a PR was created, include the PR URL.
 
 ---
 
@@ -233,6 +261,7 @@ Git Sync Complete
 - Pulled: {n} commits from remote
 - Committed: {n} files in {n} commit(s)
 - Pushed: {n} commit(s) to remote
+- PR: {url} (if --pr was used)
 ```
 
 **Interactive mode only** - Ask for workflow feedback:
