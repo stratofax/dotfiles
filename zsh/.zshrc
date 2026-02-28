@@ -47,6 +47,10 @@ case "$(uname -s)" in
     # Tailscale CLI alias (macOS cask installs CLI inside the app bundle)
     alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
+    # Obsidian CLI (binary is capitalized, docs expect lowercase)
+    export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
+    alias obsidian="Obsidian"
+
     case "$(hostname)" in
       Messier4.local)
 
