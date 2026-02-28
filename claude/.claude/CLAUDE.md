@@ -37,6 +37,15 @@ When committing multiple related files, use a summary message:
 - `feat: add chat export and rename commands`
 - `chore: update claude command configurations`
 
+### Pull and Push Rules
+
+- Always use **rebase strategy** for pulling remote changes (`git pull --rebase`)
+- If push to `main` is rejected due to branch protection, immediately switch to a feature branch + PR workflow without attempting direct push again
+
+### Logical Commit Grouping
+
+For git-sync operations, commit messages should categorize changes logically (e.g., settings vs drafts vs tasks). When multiple unrelated changes exist, group them into separate logical commits rather than one monolithic commit.
+
 ## Interaction Preferences
 
 ### Confirmation Style
@@ -81,3 +90,15 @@ For dotfiles and configuration files:
 4. **Verify**: After editing, confirm the file didn't shrink unexpectedly
 
 **If a file modification would reduce file size by >50% or delete more than 10 lines**, present the diff and get explicit approval before proceeding.
+
+### File Editing Rules
+
+When modifying existing files, always use Edit (targeted changes) rather than Write (full overwrite) unless explicitly creating a new file or the user requests a complete rewrite.
+
+### Commands & Skills
+
+Never invoke skills, slash commands, or checklist commands without first verifying they exist in the repo. If a command is not found, ask the user rather than guessing.
+
+### Permissions & Auto Mode
+
+When running in `--auto` mode or with session-level permissions granted, do not prompt for individual git command permissions. If permission prompts appear unexpectedly, suggest consolidating specific permission entries into wildcard rules in `settings.json`.
