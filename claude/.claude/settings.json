@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "postToolUse": [
+      {
+        "matcher": "Bash",
+        "pattern": "git push",
+        "command": "echo '✓ Push completed' && git log --oneline -1"
+      }
+    ],
+    "preToolUse": [
+      {
+        "matcher": "Write",
+        "command": "echo 'REMINDER: Use Edit for existing files, Write only for new files'"
+      }
+    ]
+  }
+}
