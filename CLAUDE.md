@@ -165,6 +165,10 @@ Since this is a dotfiles repository, there are no build, test, or lint commands.
 - `git commit -m "message"` - Commit changes (include computer context for computer-specific changes)
 - `git push origin <computer-branch>` - Push to computer-specific remote branch
 
+### Branch Protection
+
+The `main` branch has GitHub branch protection requiring pull requests. Always use `git-sync --pr` (or `git-sync --pr <branch-name>`) to create a feature branch and open a PR instead of pushing directly to main.
+
 ## Platform Considerations
 
 The configuration includes conditional logic for different platforms:
