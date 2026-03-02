@@ -160,3 +160,6 @@ silent! helptags ALL
 
 " To use fzf in Vim, installed by homebrew
 set rtp+=/opt/homebrew/opt/fzf
+
+" ActivityWatch integration
+autocmd VimEnter * AWStart
