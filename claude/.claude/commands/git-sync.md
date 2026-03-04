@@ -1,5 +1,6 @@
 ---
 description: Smart git sync - pull, commit with descriptive messages, push
+model: haiku
 ---
 
 ## Git Sync Command
@@ -188,7 +189,7 @@ After generating the commit message, present it to the user:
 >
 > 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 >
-> Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+> Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
 > ```
 >
 > Options:
@@ -224,7 +225,7 @@ Wait for user approval before proceeding to Phase 5.
      -m "" \
      -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" \
      -m "" \
-     -m "Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+     -m "Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
    ```
    **Why multiple `-m` flags:** Heredocs (`<<EOF`) require temp file creation, which fails in sandboxed environments. Multiple `-m` flags work universally.
 4. Run `git pull --rebase` (now that working tree is clean)

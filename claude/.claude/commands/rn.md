@@ -1,5 +1,6 @@
 ---
 description: Rename files to follow the naming conventions for this repo
+model: haiku
 ---
 
 Rename files to follow the repository's kebab-case naming convention, updating all internal links.

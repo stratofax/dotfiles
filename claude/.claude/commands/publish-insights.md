@@ -1,5 +1,6 @@
 ---
 description: Date-stamp insights report and update browsable archive
+model: haiku
 ---
 
 ## Publish Insights

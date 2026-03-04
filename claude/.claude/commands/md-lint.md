@@ -1,5 +1,6 @@
 ---
 description: Lint markdown files using markdownlint-cli2
+model: haiku
 ---
 
 ## Markdown Lint Command

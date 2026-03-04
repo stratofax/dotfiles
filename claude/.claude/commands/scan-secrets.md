@@ -1,5 +1,6 @@
 ---
 description: Scan repository for accidentally committed secrets and API keys
+model: sonnet
 ---
 
 Scan the current repository for secrets, API keys, tokens, and credentials that should not be committed.

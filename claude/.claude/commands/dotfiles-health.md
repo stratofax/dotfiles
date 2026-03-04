@@ -1,5 +1,6 @@
 ---
 description: Run a health check on all dotfiles stow packages
+model: sonnet
 ---
 
 ## Dotfiles Health Check
