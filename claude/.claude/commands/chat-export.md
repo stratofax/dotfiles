@@ -1,5 +1,6 @@
 ---
 description: Export chat summary to configured output directory
+model: haiku
 ---
 
 ## Chat Export Command

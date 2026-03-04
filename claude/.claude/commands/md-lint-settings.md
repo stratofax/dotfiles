@@ -1,5 +1,6 @@
 ---
 description: Create or update .markdownlint.json configuration
+model: haiku
 ---
 
 ## Markdown Lint Settings Command

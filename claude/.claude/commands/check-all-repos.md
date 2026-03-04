@@ -1,5 +1,6 @@
 ---
 description: Fetch, report, and optionally sync multiple git repos in batch
+model: haiku
 ---
 
 ## Check All Repos Command
